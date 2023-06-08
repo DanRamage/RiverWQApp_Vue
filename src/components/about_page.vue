@@ -2,186 +2,152 @@
     <div class="wrapper bg-white">
         <SideBar :sidebarActive="sidebarActive">
             <template v-slot:page-title-link>
-                Hows the Beach
+                Hows My SC River
             </template>
             <template v-slot:page-name>
                 About
             </template>
             <template v-slot:body-blurb>
-                <p class="text-left">
-                    The How’s the Beach initiative will improve informed decision making about recreational
-                    use of coastal waters by fostering timely access to accurate water quality data and daily
-                    nowcasts of water quality conditions among (or for) resource managers, public health officials,
-                    and the general public.
-                </p>
             </template>
             <template v-slot:sidebar-navlinks>
                 <div>
                     <p class="text-center mt-4">
-                        <a href="/" class="text-white card-link font-avenir">
-                          <h4>Forecast/Advisory</h4>
-                        </a>
-                    </p>
-                    <p class="text-center mt-4">
                         <a href="/" class="text-white card-link font-avenir"><h4>Bacteria Sources</h4></a>
-                    </p>
-                    <p class="text-center">
-                        <b-dropdown id="locations-droplist" toggle-class="locations_droplist font-avenir" dropright text="Locations" variant="primary">
-                            <b-dropdown-item href="/killdevilhills/map">OUTER BANKS</b-dropdown-item>
-                            <b-dropdown-item href="/myrtlebeach/map">MYRTLE BEACH</b-dropdown-item>
-                            <b-dropdown-item href="/surfside/map">SURFSIDE</b-dropdown-item>
-                            <b-dropdown-item href="/charleston/map">CHARLESTON HARBOR</b-dropdown-item>
-                            <b-dropdown-item href="/follybeach/map">FOLLY BEACH</b-dropdown-item>
-                            <b-dropdown-item href="/sarasota/map">SARASOTA</b-dropdown-item>
-                        </b-dropdown>
                     </p>
                 </div>
             </template>
         </SideBar>
-        <div id="content" class="ms-4 mt-4">
+        <div id="content" class="ms-4 mt-4 montserat-font">
+            <h2>Three Rivers – One Goal - Many Partners</h2>
+
+            <p class="text-left">
+                Columbia, SC – The Midlands Rivers Coalition, formerly known as the Lower Saluda River Coalition,
+                this week began its second year of water quality monitoring of the major rivers in the Columbia
+                area. This year, the monitoring has been expanded to include sampling locations on the Broad River
+                in addition to existing sites on the Lower Saluda and Congaree Rivers. The testing will be done
+                weekly and run from May through September. Weekly data will be posted each Thursday on
+                howsmyscriver.org.
+            </p>
+            <p>
+                Created in 2016, the Midlands Rivers Coalition is made up of river related businesses, environmental
+                organizations, local and state government, recreation providers, property owners, industry and other
+                users of the rivers. One of the main purposes of the coalition is to educate river users on water
+                quality issues related to our rivers.
+            </p>
+                The Lower Saluda, Broad and Congaree Rivers are recreational destinations for public fishing,
+                canoeing, kayaking, tubing, swimming and wading; and these activities involve contact with natural
+                waters. As with most natural bodies of water, these rivers can be negatively impacted periodically
+                by short-term events such as runoff from heavy rains, sewer overflows and other events. The program
+                aims to enhance public awareness on these issues.
+            <p>
+                The first objective is to make water quality information more frequently and readily available to
+                river users so they can make informed decisions on when to recreate in the river. This is the first
+                program of its type for inland waters in South Carolina.
+            </p>
             <div v-b-toggle.collapse-1 variant="outline-primary" class="text-blue avenir-font-light">
-                <span class="FAQ-text mr-4 font-weight-normal">What is How's the Beach? </span>
+                <span class="FAQ-text mr-4 font-weight-normal">Why are we testing the water? </span>
                 <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
                 <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
             </div>
             <b-collapse id="collapse-1" class="mt-1">
                 <b-card>
                     <p class="card-text text-blue avenir-font  fs-5">
-                        How’s the Beach is tool that predicts bacterial conditions in public waters at multiple
-                        locations on the east coast of America. It is designed to inform the public of unsafe swimming
-                        conditions. How’s the Beach is a joint initiative of University of South Carolina,
-                        Southeast Coastal Ocean Observing Regional Association, and the Integration and Application
-                        Network at the University of Maryland Center for Environmental Science.
+                        Contact recreation activities (swimming, wading, tubing, and paddling) may expose river users to
+                        harmful pollution. This water quality monitoring program is intended to provide river users with
+                        reliable information on water quality conditions and educate them about pollution issues so they
+                        can make informed decisions about their river activities.
                     </p>
-                    <div class="card-text text-blue avenir-font fs-5">Project Partners</div>
-                    <div>
-                        <div class="row align-items-center">
-                            <div class="col-sm-2">
-                                <a href="https://sc.edu/study/colleges_schools/public_health/index.php" target="_blank">
-                                    <img src="@/assets/images/sc_logo.png" alt="" width="150" height="75">
-                                </a>
-                            </div>
-                            <div class="col-sm-2">
-                                <img src="@/assets/images/umces_logo.png" alt="" width="150" height="75">
-                            </div>
-                            <div class="col-sm-2">
-                                <a href="https://secoora.org" target="_blank">
-                                    <img src="@/assets/images/secoora_logo.png" alt="" width="150" height="75">
-                                </a>
-                            </div>
-                            <div class="col-sm-2">
-                              <a href="https://mote.org/" target="_blank">
-                                <img src="@/assets/images/mote_icon.png" alt="" width="125" height="115">
-                              </a>
-                            </div>
-                            <div class="col-sm-2">
-                              <a href="https://www.bae.ncsu.edu/" target="_blank">
-                                <img src="@/assets/images/nc_state_bae_logo.png" alt="" width="150" height="75">
-                              </a>
-                          </div>
-                        </div>
-                    </div>
                 </b-card>
             </b-collapse>
 
             <div v-b-toggle.collapse-2 variant="outline-primary" class="text-blue avenir-font-light mt-4">
-                <span class="FAQ-text mr-4 font-weight-normal">What are we nowcasting? </span>
+                <span class="FAQ-text mr-4 font-weight-normal">What is E. coli? </span>
                 <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
                 <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
             </div>
             <b-collapse id="collapse-2" class="mt-1">
                 <b-card>
                     <p class="card-text text-blue avenir-font fs-5">
-                        Enterococci are bacteria that normally inhabit the intestinal tract of humans and animals.
-                        The presence of these bacteria can be an indication of fecal pollution, which may come from
-                        stormwater runoff, pets and wildlife, and human sewage. If they are present in high
-                        concentrations in recreational waters, it is more likely that pathogens that cause disease,
-                        infections or rashes may also be present. These pathogens can cause harm if they are ingested
-                        while swimming or enter the skin through a cut or sore.
+                        E. coli is a type of bacteria that is specific to fecal material from humans and other
+                        warm-blooded animals. It is used as an indicator of health risk from water contact in
+                        recreational waters as its presence in streams suggests that pathogenic microorganisms might
+                        also be present and that swimming and other contact recreation activities might be a health
+                        risk.
                     </p>
                 </b-card>
             </b-collapse>
 
             <div v-b-toggle.collapse-3 variant="outline-primary" class="text-blue avenir-font-light mt-4">
-                <span class="FAQ-text mr-4 font-weight-normal">What is the nowcast? How is it generated? </span>
+                <span class="FAQ-text mr-4 font-weight-normal">How often do we sample? </span>
                 <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
                 <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
             </div>
             <b-collapse id="collapse-3" class="mt-1">
                 <b-card>
                     <p class="card-text text-blue avenir-font fs-5">
-                        Bacteria levels can change very rapidly between sampling dates. To fill in the gaps,
-                        we make daily predictions of bacteria conditions. These predictions do not represent
-                        swimming advisories, but provide estimates of the likelihood that bacteria conditions
-                        would warrant issuing an advisory if sampling were conducted that day.
-
-                        These forecasts are for informational purposes only
-
-                        The probability that today's bacteria level will exceed the safe swimming standard based
-                        on an automated prediction system.
-                    </p>
-                    <p class="card-text text-blue avenir-font">
-                        Predictions are made based on relationships between bacteria level and rainfall, salinity,
-                        wind conditions, and water temperature found in previous sampling. These relationships are
-                        used to create daily estimates of bacteria level.
+                        Samples will be collected weekly during the high recreation season (May 1 – Sept. 30). Samples
+                        will be collected every Wednesday and if a sample result is high the site will be re-sampled on
+                        Thursday.
                     </p>
                 </b-card>
             </b-collapse>
 
             <div v-b-toggle.collapse-4 variant="outline-primary" class="text-blue avenir-font-light mt-4">
-              <span class="FAQ-text mr-4 font-weight-normal">Who are we collaborating with? </span>
+              <span class="FAQ-text mr-4 font-weight-normal">How long are the results accurate? </span>
               <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
               <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
             </div>
             <b-collapse id="collapse-4" class="ms-4 mt-1">
               <b-card>
-                  <h4>Mote Marine Laboratory & Aquarium</h4>
-                  <a href="https://mote.org/" target="_blank">
-                    <img src="@/assets/images/mote_icon.png" alt="" width="125" height="115">
-                  </a>
                   <p class="card-text text-blue avenir-font fs-5">
-                  How's the Beach and the Mote Marine Laboratory & Aquarium <a href="https://visitbeaches.org" target="_blank">Beach Conditions Reporting System </a>
-                  share data in locations where the two projects have a geographic overlap, such as in <a href="/sarasota/map">Sarasota </a>
+                      These samples are only a snapshot of a single location at a single time. Water quality conditions
+                      can change quickly and may be different in areas just upstream or downstream of a sample
+                      site.
                   </p>
-                  <hr>
-                  <h4>North Carolina State University Biological and Agricultural Engineering</h4>
-                  <a href="https://www.bae.ncsu.edu/" target="_blank">
-                    <img src="@/assets/images/nc_state_bae_logo.png" alt="" width="150" height="75">
-                  </a>
-                  <p class="card-text text-blue avenir-font fs-5">
-                    How's the Beach and NCSU's <a href="https://ncsu-shellcast.appspot.com/" target="_blank">ShellCast </a>
-                    share data in locations where the two projects have a geographic overlap, such as in the <a href="/killdevilhills/map">Outer Banks </a>
-                  </p>
-
 
               </b-card>
             </b-collapse>
 
 
             <div v-b-toggle.collapse-5 variant="outline-primary" class="text-blue avenir-font-light mt-4">
-                    <span class="FAQ-text mr-4 font-weight-normal">Questions? Contact us! </span>
+                    <span class="FAQ-text mr-4 font-weight-normal">What is a swim advisory? </span>
                     <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
                     <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
             </div>
             <b-collapse id="collapse-5" class="mt-1">
                 <b-card>
-                    <div class="card-text text-blue avenir-font-light fs-3">
-                        <a href="mailto: howsmybeach@gmail.com">Email us!</a>
-                    </div>
+                    <p class="card-text text-blue avenir-font fs-5">
+                        Advisories are cautions that water may contain harmful germs. Advisories are issued where high
+                        amounts of bacteria have been found. </p>
                 </b-card>
             </b-collapse>
 
             <div v-b-toggle.collapse-6 variant="outline-primary" class="text-blue avenir-font-light mt-4">
-              <span class="FAQ-text mr-4 font-weight-normal">API Reference </span>
+              <span class="FAQ-text mr-4 font-weight-normal">Does a swim advisory mean the river off limits? </span>
               <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
               <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
             </div>
             <b-collapse id="collapse-6" class="mt-1">
               <b-card>
-                <div class="card-text text-blue avenir-font-light fs-5">
-                  Access data via the API. Reference docs can be found <a href="https://devapi.howsthebeach.org/api/v1/docs" target="_blank">here.</a>
-                </div>
+                <p class="card-text text-blue avenir-font-light fs-5">
+                    An advisory is just a warning that water may contain harmful germs. It does not mean that you cannot
+                    use the river, but you should use caution.
+                </p>
               </b-card>
+            </b-collapse>
+            <div v-b-toggle.collapse-7 variant="outline-primary" class="text-blue avenir-font-light mt-4">
+                <span class="FAQ-text mr-4 font-weight-normal">Who is the group supporting this work? </span>
+                <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
+                <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
+            </div>
+            <b-collapse id="collapse-7" class="mt-1">
+                <b-card>
+                    <p class="card-text text-blue avenir-font-light fs-5">
+                        The coalition is made up of several river stakeholders including government agencies,
+                        municipalities, wastewater providers, parks, river advocacy organizations, river related
+                        businesses and other river users.
+                    </p>
+                </b-card>
             </b-collapse>
         </div>
     </div>

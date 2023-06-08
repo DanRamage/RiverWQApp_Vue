@@ -1,5 +1,5 @@
 <template>
-    <div class="cover-container text-center d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <div class="cover-container text-center d-flex w-100 h-100 p-3 mx-auto flex-column montserat-font">
         <header class="mb-auto">
             <div>
                 <h1>
