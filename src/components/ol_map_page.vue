@@ -1,5 +1,6 @@
 <template>
-    <div class="wrapper">
+    <div>
+        <!--
         <nav id="sidebar" v-bind:class="[sidebarActive ? 'active' : '']">
             <div class="h-100 px-5 py-4 montserat-font text-center text-white blue-background_color sidebar-opacity">
                 <a href="/">
@@ -40,14 +41,78 @@
                 </p>
             </div>
         </nav>
-        <div id="content">
+        -->
+        <!--
+        <nav class="navbar navbar-expand-md navbar-dark blue-background_color mb-4 font-avenir">
+            <a class="navbar-brand p-lg-1" href="/">How's My SC River</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse mt-2 mt-md-0" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle layer_dropdown" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            {{current_layer_name}}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" @click="layerSelected($event, 'openstreetmap', '')">Open Street Map</a></li>
+                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'm')">Road</a></li>
+                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 's')">Satellite</a></li>
+                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'y')">Hybrid Satellite</a></li>
+                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'p')">Hybrid Terrain</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    <a class="nav-link" href="/About">About</a>
+                </span>
+            </div>
+        </nav>
+        -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary blue-background_color font-avenir">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                  <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
+                </a>
+                <a class="navbar-brand text-white" href="/">How's My SC River</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <div id="layer_dropdown" class="btn layer_dropdown btn-outline-secondary dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                {{current_layer_name}}
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" @click="layerSelected($event, 'openstreetmap', '')">Open Street Map</a></li>
+                                <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'm')">Road</a></li>
+                                <li><a class="dropdown-item" @click="layerSelected($event, 'google', 's')">Satellite</a></li>
+                                <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'y')">Hybrid Satellite</a></li>
+                                <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'p')">Hybrid Terrain</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                  <div class="mx-auto">
+                    Latest Sample: {{latest_sample_date}}
+                  </div>
+                    <span class="navbar-text">
+                        <a class="text-white" href="/About">About</a>
+                      </span>
+                </div>
+            </div>
+        </nav>
+        <main class="container-fluid" role="main">
             <ol-map ref="site_map"
                     style="width: 100%; height: 100%; position:absolute"
                     :loadTilesWhileAnimating="true"
                     :loadTilesWhileInteracting="true">
                 <ol-view ref="site_view"
                          :rotation="rotation"
-                         projection="EPSG:4326">
+                         projection="EPSG:4326"
+                         constrainResolution="true">
                 </ol-view>
                 <ol-tile-layer ref="google_layer">
                     <ol-source-xyz :url="current_layer_url"/>
@@ -87,6 +152,7 @@
 
 
         </ol-map>
+        <!--
         <button
                 v-b-toggle.info-sidebar
                 id="sidebarCollapse"
@@ -97,12 +163,12 @@
             <span></span>
             <span></span>
         </button>
+        -->
+        <div v-show="featureStylingCompleted" >
+            <IconsLegend :icon_info="legend_icons"></IconsLegend>
+        </div>
+    </main>
 
-    </div>
-
-    <div v-show="featureStylingCompleted">
-        <IconsLegend :icon_info="legend_icons"></IconsLegend>
-    </div>
 
     <!-- This gives us the ability to know when the media queries/breaks occur -->
         <span ref="mq_detector" id="mq-detector">
@@ -195,6 +261,7 @@
                 shellfish_none_marker_icon: ShellfishNoneMarkerIcon,
                 motemarine_marker_icon: MoteMarineBeachAmbassadorIcon,
                 shellcast_marker_icon: ShellcastIcon,
+                latest_sample_date: '1970-10-21'
             }
         },
         created() {
@@ -214,7 +281,7 @@
             ];
 
 
-            this.current_layer_url = `https://mt0.google.com/vt/lyrs=${this.current_google_layer}&hl=en&x={x}&y={y}&z={z}`;
+            this.current_layer_url = `https://mt1.google.com/vt/lyrs=${this.current_google_layer}&x={x}&y={y}&z={z}`;
             this.$refs.osm_layer.tileLayer.setVisible(false);
             this.$refs.google_layer.tileLayer.setVisible(true);
 
@@ -240,7 +307,7 @@
                             //at the edges.
                             let feature_extent = vm.$refs.sites_vector_source.source.getExtent();
                             let extent_poly = fromExtent(feature_extent);
-                            extent_poly.scale(1.2);
+                            extent_poly.scale(1.25);
                             vm.$refs.site_view.fit(extent_poly, vm.$refs.site_map.map.getSize());
                         }
                     }, 100);
@@ -414,7 +481,7 @@
                     this.osm_layer_visible = false;
                     //Build the URL for the XYZ google layer.
                     this.current_google_layer = layer_selected;
-                    this.current_layer_url = `https://mt0.google.com/vt/lyrs=${this.current_google_layer}&hl=en&x={x}&y={y}&z={z}`;
+                    this.current_layer_url = `https://mt1.google.com/vt/lyrs=${this.current_google_layer}&x={x}&y={y}&z={z}`;
                     this.xyz_layer_visible = true;
                     this.$refs.google_layer.tileLayer.setVisible(true);
                 }
@@ -487,56 +554,40 @@
     }
 </script>
 <style>
+/*
     body, html {
         height: 100%;
     }
-    .btn-outline-primary {
+*/
 
-        color: #FFFFFF;
-        border-color: #FFFFFF;
-        opacity: 0.75;
-    }
-    .btn-outline-primary:hover,
-    .btn-outline-primary:focus,
-    .btn-outline-primary:active {
-        color: rgba(0, 61, 126, .85);
-        background-color: #ffffff;
-        border-color: #FFFFFF;
-        opacity: 0.75;
-    }
-    .btn-outline-primary:not(:disabled):not(.disabled).active,
-    .btn-outline-primary:not(:disabled):not(.disabled):active,
-    .show > .btn-outline-primary.dropdown-toggle
-    {
-        color: rgba(0, 61, 126, .85);
-        background-color: #ffffff;
-        border-color: #FFFFFF;
-        opacity: 0.75;
 
-    }
     #ol-map-site_map .ol-zoom {
         background-color: rgba(0, 61, 126, .85) !important;
     }
     #ol-map-site_map .ol-zoom-out {
         background-color: rgba(0, 61, 126, .85) !important;
     }
-    /*
+
     #ol-map-site_map .ol-zoom-in {
         margin-top: 200px !important;
     }
     #ol-map-site_map .ol-zoom-out {
         margin-top: 240px !important;
     }
-    */
-    .layer_dropdown > button {
-        background-color: rgba(0, 61, 126, .85);
-        border-color: #FFFFFF;
-        opacity: 0.75;
+
+    .layer_dropdown.btn {
+      background-color: rgba(0, 61, 126, .85);
+      border-color: #FFFFFF;
+      opacity: 0.75;
+    }
+    .layer_dropdown.btn-outline-secondary
+    {
+      color: rgb(255, 255, 255);
     }
 
-    .layer_dropdown > .btn-secondary:hover,
-    .layer_dropdown > .btn-secondary:focus,
-    .layer_dropdown > .btn-secondary:active {
+    .layer_dropdown.btn-outline-secondary:hover,
+    .layer_dropdown.btn-outline-secondary:focus,
+    .layer_dropdown.btn-outline-secondary:active {
         color: rgba(0, 61, 126, .85);
         background-color: #FFFFFF;
         opacity: 0.75;
@@ -551,132 +602,14 @@
         align-items: stretch;
         perspective: 1500px;
     }
-
-    #sidebar {
-        min-width: 300px;
-        max-width: 300px;
-        background: #7386D5;
-        color: #fff;
-        transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
-        transform-origin: bottom left;
-    }
-
-    #sidebar.active {
-        margin-left: -300px;
-        transform: rotateY(100deg);
-    }
-
-    #sidebar .sidebar-header {
-        padding: 20px;
-        background: #6d7fcc;
-    }
-
-    #sidebar ul.components {
-        padding: 20px 0;
-        border-bottom: 1px solid #47748b;
-    }
-
-    #sidebar ul p {
-        color: #fff;
-        padding: 10px;
-    }
-
-    #sidebar ul li a {
-        padding: 10px;
-        font-size: 1.1em;
-        display: block;
-    }
-    #sidebar ul li a:hover {
-        color: #7386D5;
-        background: #fff;
-    }
-
-    #sidebar ul li.active > a, a[aria-expanded="true"] {
-        color: #fff;
-        background: #6d7fcc;
-    }
-
-    #sidebarCollapse {
-        width: 40px;
-        height: 40px;
-        background: #f5f5f5;
-    }
-
-    #sidebarCollapse span {
-        width: 80%;
-        height: 2px;
-        margin: 0 auto;
-        display: block;
-        background: #555;
-        transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
-    }
-    #sidebarCollapse span:first-of-type {
-        /* rotate first one */
-        transform: rotate(45deg) translate(2px, 2px);
-    }
-    #sidebarCollapse span:nth-of-type(2) {
-        /* second one is not visible */
-        opacity: 0;
-    }
-    #sidebarCollapse span:last-of-type {
-        /* rotate third one */
-        transform: rotate(-45deg) translate(1px, -1px);
-    }
-    #sidebarCollapse.active span {
-        /* no rotation */
-        transform: none;
-        /* all bars are visible */
-        opacity: 1;
-        margin: 5px auto;
-    }
-    #sidebarCollapse {
-        position: relative;
-        z-index: 1000;
-        top: 7em;
-        left: .75em;
-    }
     #content {
         width: 100%;
         min-height: 100vh;
         transition: all 0.3s;
     }
 
-    .sidebar-opacity {
-        opacity: 0.9;
-    }
     @media (max-width: 768px) {
-        #sidebar {
-            margin-left: -300px;
-        }
-        #sidebar.active {
-            margin-left: 0;
-        }
-        #sidebar.active {
-            margin-left: 0;
-            transform: none;
-        }
-        #sidebarCollapse span:first-of-type,
-        #sidebarCollapse span:nth-of-type(2),
-        #sidebarCollapse span:last-of-type {
-            transform: none;
-            opacity: 1;
-            margin: 5px auto;
-        }
-        #sidebarCollapse.active span {
-            margin: 0 auto;
-        }
-        #sidebarCollapse.active span:first-of-type {
-            transform: rotate(45deg) translate(2px, 2px);
-        }
-        #sidebarCollapse.active span:nth-of-type(2) {
-            opacity: 0;
-        }
-        #sidebarCollapse.active span:last-of-type {
-            transform: rotate(-45deg) translate(1px, -1px);
-        }
-        /*#sidebarCollapse span {
-            display: none;
-        }*/
+
     }
     #mq-detector {
         visibility: hidden;

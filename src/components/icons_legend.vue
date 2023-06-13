@@ -119,12 +119,13 @@
 
 </script>
 <style>
+</style>
+<style scoped>
     .collapsed > .when-open,
     .not-collapsed > .when-closed {
         display: none;
     }
-</style>
-<style scoped>
+
     .legendButton {
         position: relative;
         top: 0;

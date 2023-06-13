@@ -20,31 +20,42 @@
         <div id="content" class="ms-4 mt-4 montserat-font">
             <h2>Three Rivers – One Goal - Many Partners</h2>
 
-            <p class="text-left">
-                Columbia, SC – The Midlands Rivers Coalition, formerly known as the Lower Saluda River Coalition,
-                this week began its second year of water quality monitoring of the major rivers in the Columbia
-                area. This year, the monitoring has been expanded to include sampling locations on the Broad River
-                in addition to existing sites on the Lower Saluda and Congaree Rivers. The testing will be done
-                weekly and run from May through September. Weekly data will be posted each Thursday on
-                howsmyscriver.org.
-            </p>
-            <p>
-                Created in 2016, the Midlands Rivers Coalition is made up of river related businesses, environmental
-                organizations, local and state government, recreation providers, property owners, industry and other
-                users of the rivers. One of the main purposes of the coalition is to educate river users on water
-                quality issues related to our rivers.
-            </p>
-                The Lower Saluda, Broad and Congaree Rivers are recreational destinations for public fishing,
-                canoeing, kayaking, tubing, swimming and wading; and these activities involve contact with natural
-                waters. As with most natural bodies of water, these rivers can be negatively impacted periodically
-                by short-term events such as runoff from heavy rains, sewer overflows and other events. The program
-                aims to enhance public awareness on these issues.
-            <p>
-                The first objective is to make water quality information more frequently and readily available to
-                river users so they can make informed decisions on when to recreate in the river. This is the first
-                program of its type for inland waters in South Carolina.
-            </p>
-            <div v-b-toggle.collapse-1 variant="outline-primary" class="text-blue avenir-font-light">
+            <div v-b-toggle.collapse-about variant="outline-primary" class="text-blue avenir-font-light">
+                <span class="FAQ-text mr-4 font-weight-normal">About  </span>
+                <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
+                <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
+            </div>
+            <b-collapse id="collapse-about" class="mt-1">
+                <b-card>
+                    <p class="text-left">
+                        Columbia, SC – The Midlands Rivers Coalition, formerly known as the Lower Saluda River Coalition,
+                        this week began its second year of water quality monitoring of the major rivers in the Columbia
+                        area. This year, the monitoring has been expanded to include sampling locations on the Broad River
+                        in addition to existing sites on the Lower Saluda and Congaree Rivers. The testing will be done
+                        weekly and run from May through September. Weekly data will be posted each Thursday on
+                        howsmyscriver.org.
+                    </p>
+                    <p>
+                        Created in 2016, the Midlands Rivers Coalition is made up of river related businesses, environmental
+                        organizations, local and state government, recreation providers, property owners, industry and other
+                        users of the rivers. One of the main purposes of the coalition is to educate river users on water
+                        quality issues related to our rivers.
+                    </p>
+                    <p>
+                        The Lower Saluda, Broad and Congaree Rivers are recreational destinations for public fishing,
+                        canoeing, kayaking, tubing, swimming and wading; and these activities involve contact with natural
+                        waters. As with most natural bodies of water, these rivers can be negatively impacted periodically
+                        by short-term events such as runoff from heavy rains, sewer overflows and other events. The program
+                        aims to enhance public awareness on these issues.
+                    </p>
+                    <p>
+                        The first objective is to make water quality information more frequently and readily available to
+                        river users so they can make informed decisions on when to recreate in the river. This is the first
+                        program of its type for inland waters in South Carolina.
+                    </p>
+                </b-card>
+            </b-collapse>
+            <div v-b-toggle.collapse-1 variant="outline-primary" class="text-blue avenir-font-light  mt-4">
                 <span class="FAQ-text mr-4 font-weight-normal">Why are we testing the water? </span>
                 <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
                 <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
