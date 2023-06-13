@@ -149,7 +149,17 @@
                         </div>
                             </ol-overlay>
                         </ol-interaction-select>
+                <ol-vector-layer ref="extents_vector_layer">
+                  <ol-source-vector ref="extents_vector_source">
+                    <ol-feature v-for="feature in features" :key="feature.id">
+                      <ol-geom-multi-line-string v-for="extent in feature.properties.extents_geometry"
+                                                 :key="extent.id"
+                                                  :coordinates="extent.geometry.coordinates">
 
+                      </ol-geom-multi-line-string>
+                    </ol-feature>
+                  </ol-source-vector>
+                </ol-vector-layer>
 
         </ol-map>
         <!--

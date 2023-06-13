@@ -1,9 +1,9 @@
 import axios from "axios";
 
 //let BASE_API_URL = 'http://howsthebeach.org/api/v1/';
-//let BASE_API_URL = 'http://127.0.0.1:5000/api/v1/';
+let BASE_API_URL = 'http://127.0.0.1:5000/api/v1/';
 //let BASE_API_URL = 'https://api.howsthebeach.org/api/v1/';
-let BASE_API_URL = 'https://devapi.howsthebeach.org/api/v1/';
+//let BASE_API_URL = 'https://devapi.howsthebeach.org/api/v1/';
 let CAMERA_URL = "https://www.floridaapdata.org/beach/response_beach.php";
 
 export default {
