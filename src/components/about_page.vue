@@ -1,33 +1,52 @@
 <template>
-    <div class="wrapper bg-white">
-        <SideBar :sidebarActive="sidebarActive">
-            <template v-slot:page-title-link>
-                Hows My SC River
-            </template>
-            <template v-slot:page-name>
-                About
-            </template>
-            <template v-slot:body-blurb>
-            </template>
-            <template v-slot:sidebar-navlinks>
-                <div>
-                    <p class="text-center mt-4">
-                        <a href="/" class="text-white card-link font-avenir"><h4>Bacteria Sources</h4></a>
-                    </p>
-                </div>
-            </template>
-        </SideBar>
-        <div id="content" class="ms-4 mt-4 montserat-font">
-            <h2>Three Rivers – One Goal - Many Partners</h2>
+    <div class="bg-white">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary blue-background_color font-avenir">
+        <div class="container-fluid">
+          <a class="navbar-brand text-white montserat-font" href="./">
+            <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
+            How's My SC River
+          </a>
+          <!--
+          <span class="me-auto navbar-sample-date text-white font-avenir">Latest Sample: {{advisoryDate}}</span>
+          -->
+          <div class="collapse navbar-collapse" id="navbarText">
+          </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </nav>
+
+      <!--
+      <SideBar :sidebarActive="sidebarActive">
+          <template v-slot:page-title-link>
+              Hows My SC River
+          </template>
+          <template v-slot:page-name>
+              About
+          </template>
+          <template v-slot:body-blurb>
+          </template>
+          <template v-slot:sidebar-navlinks>
+              <div>
+                  <p class="text-center mt-4">
+                      <a href="/" class="text-white card-link font-avenir"><h4>Bacteria Sources</h4></a>
+                  </p>
+              </div>
+          </template>
+      </SideBar>
+      -->
+        <main id="content" class="ms-4 mt-4 montserat-font">
+            <h2 class="montserat-font">Three Rivers – One Goal - Many Partners</h2>
 
             <div v-b-toggle.collapse-about variant="outline-primary" class="text-blue avenir-font-light">
-                <span class="FAQ-text mr-4 font-weight-normal">About  </span>
+                <span class="FAQ-text mr-4">About  </span>
                 <span class="whatis-opened FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-up']" /></span>
                 <span class="whatis-closed FAQ-text"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
             </div>
             <b-collapse id="collapse-about" class="mt-1">
                 <b-card>
-                    <p class="text-left">
+                    <p class="">
                         Columbia, SC – The Midlands Rivers Coalition, formerly known as the Lower Saluda River Coalition,
                         this week began its second year of water quality monitoring of the major rivers in the Columbia
                         area. This year, the monitoring has been expanded to include sampling locations on the Broad River
@@ -62,7 +81,7 @@
             </div>
             <b-collapse id="collapse-1" class="mt-1">
                 <b-card>
-                    <p class="card-text text-blue avenir-font  fs-5">
+                    <p class="">
                         Contact recreation activities (swimming, wading, tubing, and paddling) may expose river users to
                         harmful pollution. This water quality monitoring program is intended to provide river users with
                         reliable information on water quality conditions and educate them about pollution issues so they
@@ -78,7 +97,7 @@
             </div>
             <b-collapse id="collapse-2" class="mt-1">
                 <b-card>
-                    <p class="card-text text-blue avenir-font fs-5">
+                    <p class="">
                         E. coli is a type of bacteria that is specific to fecal material from humans and other
                         warm-blooded animals. It is used as an indicator of health risk from water contact in
                         recreational waters as its presence in streams suggests that pathogenic microorganisms might
@@ -95,7 +114,7 @@
             </div>
             <b-collapse id="collapse-3" class="mt-1">
                 <b-card>
-                    <p class="card-text text-blue avenir-font fs-5">
+                    <p class="">
                         Samples will be collected weekly during the high recreation season (May 1 – Sept. 30). Samples
                         will be collected every Wednesday and if a sample result is high the site will be re-sampled on
                         Thursday.
@@ -110,7 +129,7 @@
             </div>
             <b-collapse id="collapse-4" class="ms-4 mt-1">
               <b-card>
-                  <p class="card-text text-blue avenir-font fs-5">
+                  <p class="">
                       These samples are only a snapshot of a single location at a single time. Water quality conditions
                       can change quickly and may be different in areas just upstream or downstream of a sample
                       site.
@@ -127,7 +146,7 @@
             </div>
             <b-collapse id="collapse-5" class="mt-1">
                 <b-card>
-                    <p class="card-text text-blue avenir-font fs-5">
+                    <p class="">
                         Advisories are cautions that water may contain harmful germs. Advisories are issued where high
                         amounts of bacteria have been found. </p>
                 </b-card>
@@ -140,7 +159,7 @@
             </div>
             <b-collapse id="collapse-6" class="mt-1">
               <b-card>
-                <p class="card-text text-blue avenir-font-light fs-5">
+                <p class="">
                     An advisory is just a warning that water may contain harmful germs. It does not mean that you cannot
                     use the river, but you should use caution.
                 </p>
@@ -153,19 +172,19 @@
             </div>
             <b-collapse id="collapse-7" class="mt-1">
                 <b-card>
-                    <p class="card-text text-blue avenir-font-light fs-5">
+                    <p class="">
                         The coalition is made up of several river stakeholders including government agencies,
                         municipalities, wastewater providers, parks, river advocacy organizations, river related
                         businesses and other river users.
                     </p>
                 </b-card>
             </b-collapse>
-        </div>
+        </main>
     </div>
 </template>
 <script>
     import Vue from 'vue'
-    import SideBar from '@/components/sidebar'
+    //import SideBar from '@/components/sidebar'
     import { library } from '@fortawesome/fontawesome-svg-core'
     import { faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -174,7 +193,9 @@
 
     export default {
         name: 'AboutPage',
-        components: {SideBar},
+        components: {
+          //SideBar
+        },
         props: [],
         data() {
             return {
@@ -207,27 +228,18 @@
 
 </script>
 <style>
-    #locations-droplist  > .dropdown-menu {
-        background-color: #2d5b92 !important;
-    }
-    #locations-droplist li > .dropdown-item {
-        color: #FFFFFF;
-    }
-    #locations-droplist li > .dropdown-item:focus, .dropdown-item:hover {
-        background-color: #2d5b92;
-    }
-    .locations_droplist {
-        background-color: #2d5b92;
-        border-color: #2d5b92;
-        font-size: 1.5rem;
-    }
 </style>
 <style scoped>
-    #content {
-        width: 100%;
-        min-height: 100vh;
-        transition: all 0.3s;
-    }
+  .collapsed > .whatis-opened,
+  :not(.collapsed) > .whatis-closed {
+    display: none;
+  }
+  #content {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+  }
+    /*
 
     .wrapper {
         display: flex;
@@ -237,11 +249,9 @@
         perspective: 1500px;
     }
 
-    .collapsed > .whatis-opened,
-    :not(.collapsed) > .whatis-closed {
-        display: none;
-    }
     .FAQ-text {
         font-size: 1.75rem;
     }
+
+     */
 </style>

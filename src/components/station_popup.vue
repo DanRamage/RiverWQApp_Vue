@@ -1,186 +1,243 @@
 <template>
-  <div class="montserat-font container page-background data-graph">
-    <div class="row mt-3">
-      <div class="col-sm-12 mt-5">
-        <div class="font-avenir fs-4">
-          <div>Water Quality Site: {{ site_description }}</div>
-          <div>Site ID: {{ site_id_data }}</div>
+  <div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary blue-background_color font-avenir">
+      <div class="container-fluid">
+        <a class="navbar-brand text-white montserat-font" href="#">
+          <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
+          How's My SC River
+        </a>
+        <!--
+        <span class="me-auto navbar-sample-date text-white font-avenir">Latest Sample: {{advisoryDate}}</span>
+        -->
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item navbar-text">
+              <a class="text-white" href="/About">About</a>
+            </li>
+          </ul>
+          <span class="navbar-text">
+                      </span>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="container-fluid page-background data-graph">
+      <div class="row mt-3">
+        <div class="col-sm-12 mt-5">
+          <div class="fs-4">
+            <div>Water Quality Site: {{ site_description }}</div>
+            <div>Site ID: {{ site_id_data }}</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-3 min-width-map-column" style="height: 250px; width: 250px">
-          <SingleSiteMap v-if="site_feature !== undefined"
-                         style="height: 250px; width: 250px"
-                         :p_site_feature="site_feature"></SingleSiteMap>
-      </div>
-      <div class="col-sm-9">
-        <div v-if="hasNowcastData" class="row">
-          <div class="col-sm-12 mt-3 m-lg-3">
-            <div>
+      <div class="row">
+        <div class="col-sm-3 min-width-map-column" style="height: 250px; width: 250px">
+            <SingleSiteMap v-if="site_feature !== undefined"
+                           style="height: 250px; width: 250px"
+                           :p_site_feature="site_feature"></SingleSiteMap>
+        </div>
+        <div class="col-sm-9">
+          <div v-if="hasNowcastData" class="row">
+            <div class="col-sm-12 mt-3 m-lg-3">
+              <div>
+                <div class="fs-4">
+                  <a @click="clickNowCastInfo">Nowcast <i class="bi bi-info-circle info-icon"></i></a>
+                </div>
+                <p>
+                  <span class="ms-5 fs-5">Nowcast for {{ nowcastsDate }}: <span :class="alert_text_color(nowcastsValue)"> {{ nowcastsValue }}</span></span>
+                  <br>
+                  <span class="ml-4 avenir-font-light"></span>
+                  <br>
+                  <b v-if='isDataFresh("nowcasts") == false' class="ml-4 avenir-font-light text-danger">RESULTS ARE OUT OF
+                    DATE</b>
+                </p>
+              </div>
+              <NowcastInfoModal ref="nowcast_modal" v-show="showNowCastModal" @close-nowcast-modal="showNowCastModal = false" />
+            </div>
+          </div>
+          <div v-if="show_bacteria_results" class="row">
+            <div class="col-sm-12 mt-3 m-lg-3">
               <div class="fs-4">
-                <a @click="clickNowCastInfo">Nowcast <i class="bi bi-info-circle info-icon"></i></a>
+                <a @click="bacteriaPopup">Sampled Bacteria Data <i class="bi bi-info-circle info-icon"></i></a>
               </div>
-              <p>
-                <span class="ms-5 fs-5">Nowcast for {{ nowcastsDate }}: <span :class="alert_text_color(nowcastsValue)"> {{ nowcastsValue }}</span></span>
-                <br>
-                <span class="ml-4 avenir-font-light"></span>
-                <br>
-                <b v-if='isDataFresh("nowcasts") == false' class="ml-4 avenir-font-light text-danger">RESULTS ARE OUT OF
-                  DATE</b>
-              </p>
-            </div>
-            <NowcastInfoModal ref="nowcast_modal" v-show="showNowCastModal" @close-nowcast-modal="showNowCastModal = false" />
-          </div>
-        </div>
-        <div v-if="show_bacteria_results" class="row">
-          <div class="col-sm-12 mt-3 m-lg-3">
-            <div class="fs-4">
-              <a @click="bacteriaPopup">Sampled Bacteria Data <i class="bi bi-info-circle info-icon"></i></a>
-            </div>
-            <div v-if="!loading">
-              <div v-if="hasAdvisoryData">+
-                  <div class="ms-5 fs-5">
-                      Advisory: <span :class="alert_text_color(advisoryLevel)">{{advisory_text(advisoryLevel)}}</span>
-                  </div>
-                  <div class="ms-5 fs-5">
-                    Bacteria Data for {{ advisoryDate }}: <span :class="alert_text_color(advisoryLevel)">{{advisoryValue}}</span>
-                  </div>
-                  <div class="ms-5 fs-5">
-                    <b v-if='isDataFresh("advisory") == false' class="avenir-font-light text-danger">RESULTS ARE OUT OF
-                      DATE</b>
-                  </div>
-              </div>
-            </div>
-          </div>
-          <CollectionProgramModal program_type='Water Quality' v-show="showBacteriaModal" @close-collection-modal="showBacteriaModal = false"/>
-
-        </div>
-      </div>
-    </div>
-    <!---
-    <div class="row gy-0">
-      <div class="col-12">
-        <hr>
-        <div class="row">
-          <div v-if="hasNowcastData">
-            <div class="col mt-3">
-              <div class="fs-6">
-                <a @click="clickNowCastInfo">Nowcast <i class="bi bi-info-circle info-icon"></i></a>
-              </div>
-              <p>
-                <span class="ms-5 fs-6">Nowcast for {{ nowcastsDate }}: <span :class="alert_text_color(nowcastsValue)"> {{ nowcastsValue }}</span></span>
-                <br>
-                <span class="ml-4 avenir-font-light"></span>
-                <br>
-                <b v-if='isDataFresh("nowcasts") == false' class="ml-4 avenir-font-light text-danger">RESULTS ARE OUT OF
-                  DATE</b>
-              </p>
-            </div>
-            <NowcastInfoModal ref="nowcast_modal" v-show="showNowCastModal" @close-nowcast-modal="showNowCastModal = false" />
-          </div>
-        </div>
-      </div>
-    </div>
-    --->
-    <!---
-    Water quality data row
-    --->
-    <!---
-    <div class="row gy-0">
-      <div class="col-sm-12">
-        <hr>
-        <div class="fs-6">
-          <a @click="bacteriaPopup">Sampled Bacteria Data <i class="bi bi-info-circle info-icon"></i></a>
-        </div>
-        <div v-if="!loading">
-          <div v-if="hasAdvisoryData" class="row">
-            <div class="col-sm-4">
-              <div class="ms-5 fs-6">
-                Bacteria Data for {{ advisoryDate }}: <span :class="alert_text_color(advisoryValue)">{{ advisoryValue }}</span>
-              </div>
-              <div class="ms-5 fs-6">
-                <b v-if='isDataFresh("advisory") == false' class="avenir-font-light text-danger">RESULTS ARE OUT OF
-                  DATE</b>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <h5 class="montserat-font">Bacteria Data Graph</h5>
-              <div class="row mb-1">
-                <div class="col-sm-5">
-                  <div class="montserat-font">Data Time Period</div>
-                  <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                    <option value="30" @click="daysButtonClick($event, 30)">30 days</option>
-                    <option value="60" @click="daysButtonClick($event, 60)">60 days</option>
-                    <option value="90" @click="daysButtonClick($event, 90)">90 days</option>
-                    <option value="365" @click="daysButtonClick($event, 365)">365 days</option>
-                  </select>
+              <div v-if="!loading">
+                <div v-if="hasAdvisoryData">
+                    <div class="ms-5 fs-5">
+                        Advisory: <span :class="alert_text_color(advisoryLevel)">{{advisory_text(advisoryLevel)}}</span>
+                    </div>
+                    <div class="ms-5 fs-5">
+                      Bacteria Data for {{ advisoryDate }}: <span :class="alert_text_color(advisoryLevel)">{{advisoryValue}}</span>
+                    </div>
+                    <div class="ms-5 fs-5">
+                      <b v-if='isDataFresh("advisory") == false' class="avenir-font-light text-danger">RESULTS ARE OUT OF
+                        DATE</b>
+                    </div>
                 </div>
               </div>
-              <div v-if="haveWQData" class="row">
-                <div class="col" v-show="chartType === 'pie'">
-                  <div ref="pie_chart_column" class="full-graph">
-                    <WQPlot ref="station_pie_chart"
-                            :chart_options="pie_chart_options"
-                            id='station_pie_chart'
-                            :station_data="pie_chart_data"
-                            height=250>
-                    </WQPlot>
+              <div class="col-sm-4">
+                <h5 class="avenir-font mt-3">Bacteria Data Graph</h5>
+                <div class="row mb-1">
+                  <div class="col-sm-12">
+                    <div class="input-group row">
+                      <label class="input-group-text avenir-font-light col-sm-6">Data Time Period</label>
+                      <select class="form-select avenir-font-light col-sm-6" aria-label=".form-select-sm example">
+                        <option value="30" @click="daysButtonClick($event, 30)">30 days</option>
+                        <option value="60" @click="daysButtonClick($event, 60)">60 days</option>
+                        <option value="90" @click="daysButtonClick($event, 90)">90 days</option>
+                        <option value="365" @click="daysButtonClick($event, 365)">365 days</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
-                <div class="col" v-show="chartType === 'scatter'">
-                  <div ref="scatter_chart_column" class="full-graph">
-                    <WQPlot ref="station_scatter_plot"
-                            :chart_options="scatter_chart_options"
-                            id='station_scatter_plot'
-                            :station_data="scatter_plot_data"
-                            height=250>
-                    </WQPlot>
+                <div v-if="haveWQData" class="row align-items-center">
+                  <div class="col-sm-6" v-show="chartType === 'pie'">
+                      <WQPlot ref="station_pie_chart"
+                              :chart_options="pie_chart_options"
+                              id='station_pie_chart'
+                              :station_data="pie_chart_data"
+                              height=150>
+                      </WQPlot>
                   </div>
-                </div>
-              </div>
-              <div v-else class="row" style="height: 250px">
-                <h4>No data for the time period, select a longer time period below.</h4>
-              </div>
-              <div class="row mt-1">
-                <div class="col-sm-7">
-                  <div class="montserat-font">Chart Type</div>
-
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="PieChart" id="piechart"
-                           @click="chartTypesButtonClick($event, 'pie')"
-                           :checked="chartTypeBtn === 'pie' ? true : false">
-                    <label class="form-check-label" for="piechart">Pie Chart</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="ScatterChart" id="scatterplot"
-                           @click="chartTypesButtonClick($event,'scatter')"
-                           :checked="chartTypeBtn === 'scatter' ? true : false">
-                    <label class="form-check-label" for="scatterplot">Scatter Plot</label>
+                  <div class="col-sm-6 avenir-font">
+                      Total Samples: {{total_records}}
+                      Above Limit: {{records_above_max_threshold}}
                   </div>
                 </div>
               </div>
             </div>
+            <CollectionProgramModal program_type='Water Quality' v-show="showBacteriaModal" @close-collection-modal="showBacteriaModal = false"/>
+
           </div>
-          <CollectionProgramModal program_type='Water Quality' v-show="showBacteriaModal" @close-collection-modal="showBacteriaModal = false"/>
         </div>
       </div>
-    </div>
-    --->
-    <div class="row gy-0">
-      <div class="col-sm-12">
-        <hr>
-        <div class="fs-4">Current Conditions</div>
-
-        <div v-if="site_feature !== undefined">
-          <NWSAlerts :latitude="site_latitude"
-                     :longitude="site_longitude"
-                     :post_code="site_post_code">
-
-          </NWSAlerts>
+      <!---
+      <div class="row gy-0">
+        <div class="col-12">
+          <hr>
+          <div class="row">
+            <div v-if="hasNowcastData">
+              <div class="col mt-3">
+                <div class="fs-6">
+                  <a @click="clickNowCastInfo">Nowcast <i class="bi bi-info-circle info-icon"></i></a>
+                </div>
+                <p>
+                  <span class="ms-5 fs-6">Nowcast for {{ nowcastsDate }}: <span :class="alert_text_color(nowcastsValue)"> {{ nowcastsValue }}</span></span>
+                  <br>
+                  <span class="ml-4 avenir-font-light"></span>
+                  <br>
+                  <b v-if='isDataFresh("nowcasts") == false' class="ml-4 avenir-font-light text-danger">RESULTS ARE OUT OF
+                    DATE</b>
+                </p>
+              </div>
+              <NowcastInfoModal ref="nowcast_modal" v-show="showNowCastModal" @close-nowcast-modal="showNowCastModal = false" />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      --->
+      <!---
+      Water quality data row
+      --->
+      <!---
+      <div class="row gy-0">
+        <div class="col-sm-12">
+          <hr>
+          <div class="fs-6">
+            <a @click="bacteriaPopup">Sampled Bacteria Data <i class="bi bi-info-circle info-icon"></i></a>
+          </div>
+          <div v-if="!loading">
+            <div v-if="hasAdvisoryData" class="row">
+              <div class="col-sm-4">
+                <div class="ms-5 fs-6">
+                  Bacteria Data for {{ advisoryDate }}: <span :class="alert_text_color(advisoryValue)">{{ advisoryValue }}</span>
+                </div>
+                <div class="ms-5 fs-6">
+                  <b v-if='isDataFresh("advisory") == false' class="avenir-font-light text-danger">RESULTS ARE OUT OF
+                    DATE</b>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <h5 class="montserat-font">Bacteria Data Graph</h5>
+                <div class="row mb-1">
+                  <div class="col-sm-5">
+                    <div class="montserat-font">Data Time Period</div>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                      <option value="30" @click="daysButtonClick($event, 30)">30 days</option>
+                      <option value="60" @click="daysButtonClick($event, 60)">60 days</option>
+                      <option value="90" @click="daysButtonClick($event, 90)">90 days</option>
+                      <option value="365" @click="daysButtonClick($event, 365)">365 days</option>
+                    </select>
+                  </div>
+                </div>
+                <div v-if="haveWQData" class="row">
+                  <div class="col" v-show="chartType === 'pie'">
+                    <div ref="pie_chart_column" class="full-graph">
+                      <WQPlot ref="station_pie_chart"
+                              :chart_options="pie_chart_options"
+                              id='station_pie_chart'
+                              :station_data="pie_chart_data"
+                              height=250>
+                      </WQPlot>
+                    </div>
+                  </div>
+                  <div class="col" v-show="chartType === 'scatter'">
+                    <div ref="scatter_chart_column" class="full-graph">
+                      <WQPlot ref="station_scatter_plot"
+                              :chart_options="scatter_chart_options"
+                              id='station_scatter_plot'
+                              :station_data="scatter_plot_data"
+                              height=250>
+                      </WQPlot>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="row" style="height: 250px">
+                  <h4>No data for the time period, select a longer time period below.</h4>
+                </div>
+                <div class="row mt-1">
+                  <div class="col-sm-7">
+                    <div class="montserat-font">Chart Type</div>
+
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="PieChart" id="piechart"
+                             @click="chartTypesButtonClick($event, 'pie')"
+                             :checked="chartTypeBtn === 'pie' ? true : false">
+                      <label class="form-check-label" for="piechart">Pie Chart</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="ScatterChart" id="scatterplot"
+                             @click="chartTypesButtonClick($event,'scatter')"
+                             :checked="chartTypeBtn === 'scatter' ? true : false">
+                      <label class="form-check-label" for="scatterplot">Scatter Plot</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <CollectionProgramModal program_type='Water Quality' v-show="showBacteriaModal" @close-collection-modal="showBacteriaModal = false"/>
+          </div>
+        </div>
+      </div>
+      --->
+      <div class="row gy-0">
+        <div class="col-sm-12">
+          <hr>
+          <div class="fs-4">Current Conditions</div>
+          <div v-if="site_feature !== undefined">
+            <NWSAlerts :latitude="site_latitude"
+                       :longitude="site_longitude"
+                       :p_post_code="site_post_code"
+                       :p_usgs_site="usgs_site_id"
+                       :p_usgs_site_parameters="usgs_site_parameters">
+
+            </NWSAlerts>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
 
@@ -190,15 +247,14 @@ import FeatureUtils from "../utilities/feature_funcs";
 
 import DataAPI from "../utilities/rest_api";
 
-//import WQPlot from "@/components/scatter_plot";
+import WQPlot from "@/components/scatter_plot";
 import Highcharts from 'highcharts';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import NWSAlerts from "@/components/nws_alerts";
-
 import none_marker from '@/assets/images/none_marker_25x25.png';
-import low_marker from '@/assets/images/low_marker_25x25.png';
-import high_marker from '@/assets/images/high_marker_25x25.png';
+import low_marker from '@/assets/images/low_marker.png';
+import high_marker from '@/assets/images/high_marker.png';
 
 import NowcastInfoModal from '@/components/nowcast_info_page';
 import CollectionProgramModal from '@/components/collection_progam_page';
@@ -217,11 +273,12 @@ export default {
     }
   },
   components: {
-    //WQPlot,
+    WQPlot,
     NWSAlerts,
     NowcastInfoModal,
     CollectionProgramModal,
     SingleSiteMap
+
   },
   data() {
     return {
@@ -345,6 +402,9 @@ export default {
       },
       pie_chart_options:
           {
+            credits: {
+              enabled: false
+            },
             chart: {
               backgroundColor: '#FFFFFF',
               //backgroundColor: '#003D7ED8',
@@ -370,7 +430,7 @@ export default {
                 cursor: 'pointer',
                 size: "95 %",
                 dataLabels: {
-                  enabled: true,
+                  enabled: false,
                   format: '<b>{point.name}</b>: {point.y}',
                   color: '#000000'
                 }
@@ -545,12 +605,12 @@ export default {
           {
             name: 'Sample Count',
             y: vm.total_records,
-            color: 'blue'
+            color: 'green'
           },
           {
             name: 'Samples Above Limit',
             y: vm.records_above_max_threshold,
-            color: 'red'
+            color: 'orange'
           }
         ]
         vm.percentage_exceeds = parseInt((vm.records_above_max_threshold / vm.total_records) * 100.0);
@@ -563,27 +623,6 @@ export default {
     },
     bacteriaPopup() {
       console.debug("bacteriaPopup clicked.");
-      /*temporay until we get the states into the database*/
-      /*
-      let sc_sites = ['charleston', 'myrtlebeach', 'follybeach', 'surfside'];
-      let nc_sites = ['killdevilhills'];
-      let fl_sites = ['sarasota'];
-      this.activeBacteriaModalName = '';
-      this.activeBacteriaModal = undefined;
-      if (sc_sites.includes(this.$store.state.site_name)) {
-        this.activeBacteriaModalName = "sc_bacteria_data_modal";
-        this.activeBacteriaModal = "SCDHECBacteriaPopup";
-      }
-      else if (nc_sites.includes(this.$store.state.site_name)) {
-        this.activeBacteriaModalName = "nc_bacteria_data_modal";
-        this.activeBacteriaModal = "NCBacteriaPopup";
-      }
-      else if (fl_sites.includes(this.$store.state.site_name)) {
-        this.activeBacteriaModalName = "fl_bacteria_data_modal";
-        this.activeBacteriaModal = "FLBacteriaPopup";
-      }
-      */
-      //this.$bvModal.show(this.activeBacteriaModalName);
       this.showBacteriaModal = true;
     },
     clickNowCastInfo() {
@@ -656,6 +695,26 @@ export default {
       }
       return ("");
     },
+    usgs_site_id :function() {
+      let site_id = undefined;
+      if (this.feature_data !== undefined) {
+        if('site_observations' in this.feature_data.properties &&
+            'usgs_sites' in this.feature_data.properties['site_observations']) {
+          site_id = this.feature_data.properties['site_observations']['usgs_sites']['site_id']
+        }
+      }
+      return(site_id);
+    },
+    usgs_site_parameters :function() {
+      let site_params = undefined;
+      if (this.feature_data !== undefined) {
+        if('site_observations' in this.feature_data.properties &&
+            'usgs_sites' in this.feature_data.properties['site_observations']) {
+            site_params = this.feature_data.properties['site_observations']['usgs_sites']['parameters_to_query']
+        }
+      }
+      return(site_params);
+    },
     chartType: {
       get: function () {
         return this.chartTypeBtn;
@@ -724,10 +783,10 @@ export default {
                   if ('results' in this.feature_data.properties[site_type].advisory) {
                       let len = this.feature_data.properties[site_type].advisory.results.length;
                       if (len > 0) {
-                          value = parseInt(this.feature_data.properties[site_type].advisory.results[len - 1].value);
+                          value = parseFloat(this.feature_data.properties[site_type].advisory.results[len - 1].value);
                       }
                   } else {
-                      value = parseInt(this.feature_data.properties[site_type].advisory.value, 10);
+                      value = parseFloat(this.feature_data.properties[site_type].advisory.value, 10);
                   }
               } catch (error) {
                   console.error(error);
@@ -841,4 +900,5 @@ export default {
   background-color: #FFFFFF;
   /*background-color: #003D7ED8;*/
 }
+
 </style>

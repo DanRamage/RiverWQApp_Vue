@@ -1,22 +1,18 @@
 <template>
     <div class="container-fluid background_style">
-        <div class="cover-container text-center d-flex w-100 h-100 p-3 mx-auto flex-column montserat-font">
-            <header class="mb-auto">
-                <div>
-                    <h1>
-                        <span class="text-background">HOW'S MY RIVER?</span>
-                    </h1>
+        <div class="vh-100 d-flex">
+            <div class="cover-container text-center mx-auto my-auto flex-column montserat-font">
+                <h1>
+                  <span class="text-background">HOW'S MY RIVER?</span>
+                </h1>
 
-                </div>
-            </header>
-            <main class="px-3 vh-100">
                 <span class="text-background">
                   <p class="lead text-background">
                     Headed to the river? Use this app to see if the water quality is healthy before going in!
                   </p>
                 </span>
                 <p class="lead">
-                    <a href="/saluda/map" class="btn btn-lg btn-default">Check Midlands Rivers</a>
+                    <a href="/midlands/map" class="btn btn-lg btn-default site-button">Check Midlands Rivers</a>
                 </p>
                 <p class="lead text-background">
                     Click on a <img class="img-rounded" src="@/assets/images/low_marker.png"  style="width: 40px; height: 40px;"> for site data.
@@ -39,8 +35,8 @@
                     </a>
                 </p>
 
-            </main>
-        </div>
+            </div>
+      </div>
     </div>
 </template>
 
@@ -74,22 +70,18 @@ export default {
 
 </script>
 
-<style>
-  /*body, html {
-    height: 100%;
-    background-color: rgba(0, 61, 126, .1) !important;
-  }*/
-  .background_style {
-      background: url("@/assets/images/saluda-river-pic.jpg") no-repeat center center fixed;
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-      min-height: 100%
-  }
-</style>
 <style scoped>
-
+   .background_style {
+     background: url("@/assets/images/saluda-river-pic.jpg") no-repeat center center fixed;
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     background-size: cover;
+     min-height: 100%
+   }
+  .site-button {
+    background-color: rgb(255, 255, 255, 1.0);
+  }
 .text-background{
     /*display:inline;
     background-color: #000000;*/

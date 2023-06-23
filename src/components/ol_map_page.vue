@@ -1,87 +1,15 @@
 <template>
     <div>
-        <!--
-        <nav id="sidebar" v-bind:class="[sidebarActive ? 'active' : '']">
-            <div class="h-100 px-5 py-4 montserat-font text-center text-white blue-background_color sidebar-opacity">
-                <a href="/">
-                    <h6><i><span v-text="title"></span></i></h6>
-                </a>
-                <h4><span v-text="site_name"></span></h4>
-                <p class="text-left">
-                    The Lower Saluda, Broad and Congaree Rivers are recreational destinations for public fishing,
-                    canoeing, kayaking, tubing, swimming and wading; and these activities involve contact with natural
-                    waters. As with most natural bodies of water, these rivers can be negatively impacted periodically
-                    by short-term events such as runoff from heavy rains, sewer overflows and other events. The program
-                    aims to enhance public awareness on these issues.
-                </p>
-
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary dropdown-toggle layer_dropdown mt-4" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        {{current_layer_name}}
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" @click="layerSelected($event, 'openstreetmap', '')">Open Street Map</a></li>
-                        <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'm')">Road</a></li>
-                        <li><a class="dropdown-item" @click="layerSelected($event, 'google', 's')">Satellite</a></li>
-                        <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'y')">Hybrid Satellite</a></li>
-                        <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'p')">Hybrid Terrain</a></li>
-                    </ul>
-
-                </div>
-                <br>
-                <p class="text-center mt-4">
-                    <a href="" class="text-white card-link">Bacteria Sources</a>
-                </p>
-                <p class="text-center">
-                    <a href="#" class="text-white card-link">Locations</a>
-                </p>
-                <p class="text-center">
-                    <a href="/About" class="text-white card-link">About</a>
-                </p>
-            </div>
-        </nav>
-        -->
-        <!--
-        <nav class="navbar navbar-expand-md navbar-dark blue-background_color mb-4 font-avenir">
-            <a class="navbar-brand p-lg-1" href="/">How's My SC River</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse mt-2 mt-md-0" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <button class="btn btn-outline-primary dropdown-toggle layer_dropdown" type="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            {{current_layer_name}}
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" @click="layerSelected($event, 'openstreetmap', '')">Open Street Map</a></li>
-                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'm')">Road</a></li>
-                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 's')">Satellite</a></li>
-                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'y')">Hybrid Satellite</a></li>
-                            <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'p')">Hybrid Terrain</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <span class="navbar-text">
-                    <a class="nav-link" href="/About">About</a>
-                </span>
-            </div>
-        </nav>
-        -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary blue-background_color font-avenir">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand text-white montserat-font" href="/">
                   <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
+                  How's My SC River
                 </a>
-                <a class="navbar-brand text-white" href="/">How's My SC River</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarText">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
+              <span class="me-auto navbar-sample-date text-white font-avenir">Latest Sample: {{latest_sample_date}}</span>
+              <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown me-4">
                             <div id="layer_dropdown" class="btn layer_dropdown btn-outline-secondary dropdown-toggle"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                 {{current_layer_name}}
@@ -94,25 +22,27 @@
                                 <li><a class="dropdown-item" @click="layerSelected($event, 'google', 'p')">Hybrid Terrain</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item navbar-text">
+                          <a class="text-white" href="/About">About</a>
+                        </li>
                     </ul>
-                  <div class="mx-auto">
-                    Latest Sample: {{latest_sample_date}}
-                  </div>
                     <span class="navbar-text">
-                        <a class="text-white" href="/About">About</a>
-                      </span>
+                    </span>
                 </div>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
             </div>
         </nav>
-        <main class="container-fluid" role="main">
+        <main class="container-fluid remove-all-margin-padding" role="main">
             <ol-map ref="site_map"
                     style="width: 100%; height: 100%; position:absolute"
                     :loadTilesWhileAnimating="true"
                     :loadTilesWhileInteracting="true">
                 <ol-view ref="site_view"
                          :rotation="rotation"
-                         projection="EPSG:4326"
-                         constrainResolution="true">
+                         :projection="projection"
+                         >
                 </ol-view>
                 <ol-tile-layer ref="google_layer">
                     <ol-source-xyz :url="current_layer_url"/>
@@ -121,12 +51,11 @@
                     <ol-source-osm />
                 </ol-tile-layer>
 
-                <ol-vector-layer ref="sites_vector_layer">
+                <ol-vector-layer ref="sites_vector_layer" zIndex="10">
                     <ol-source-vector ref="sites_vector_source">
                         <ol-feature v-for="feature in features"
                                     :key="feature.id"
-                                    :properties="{  id: feature.id,
-                                                    properties: feature.properties}"
+                                    :properties="{ id: feature.id }"
                         >
 
                             <ol-geom-point
@@ -149,9 +78,13 @@
                         </div>
                             </ol-overlay>
                         </ol-interaction-select>
+                <!--
+                This vector layer is for the site extents, if we have any.
+                -->
                 <ol-vector-layer ref="extents_vector_layer">
                   <ol-source-vector ref="extents_vector_source">
-                    <ol-feature v-for="feature in features" :key="feature.id">
+                    <ol-feature v-for="feature in features" :key="feature.id"
+                                :properties="{ id: feature.id }">
                       <ol-geom-multi-line-string v-for="extent in feature.properties.extents_geometry"
                                                  :key="extent.id"
                                                   :coordinates="extent.geometry.coordinates">
@@ -159,22 +92,11 @@
                       </ol-geom-multi-line-string>
                     </ol-feature>
                   </ol-source-vector>
+                  <ol-style :overrideStyleFunction="extent_style_function"></ol-style>
                 </ol-vector-layer>
 
         </ol-map>
-        <!--
-        <button
-                v-b-toggle.info-sidebar
-                id="sidebarCollapse"
-                class="btn btn-outline-info btn-sm"
-                v-on:click="sidebarButtonClick()"
-                v-bind:class="[sidebarBtnActive ? 'active' : '']">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        -->
-        <div v-show="featureStylingCompleted" >
+        <div v-show="featureStylingCompleted" class="float-end">
             <IconsLegend :icon_info="legend_icons"></IconsLegend>
         </div>
     </main>
@@ -200,7 +122,7 @@
     import app from 'vue';
     import "bootstrap";
     import 'bootstrap-vue/dist/bootstrap-vue.css';
-    import 'typeface-montserrat/index.css';
+    //import 'typeface-montserrat/index.css';
 
     import OpenLayersMap from "vue3-openlayers";
     app.use(OpenLayersMap);
@@ -214,8 +136,9 @@
     import IconsLegend from "@/components/icons_legend";
 
     import Icon from 'ol/style/Icon';
+    import Stroke from 'ol/style/Stroke';
     import Collection from 'ol/Collection';
-    import Style from 'ol/style/Style';
+    //import Style from 'ol/style/Style';
     import {fromExtent} from 'ol/geom/Polygon';
 
     //SInce these are not in the template, we import them here. We use them in the javascript below when
@@ -229,6 +152,7 @@
     import ShellfishNoneMarkerIcon from '@/assets/images/shellfish_none_marker_25x25.png'
     import MoteMarineBeachAmbassadorIcon from '@/assets/images/mote-beach-ambassador-25x41.png'
     import ShellcastIcon from '@/assets/images/shellcast_marker_25x25.png'
+    import moment from "moment/moment";
 
     export default {
         name: 'OLMapPage',
@@ -241,7 +165,8 @@
             return {
                 title: "HOW'S THE RIVER",
                 site_name: "",
-                zoom: 5,
+                zoom: 6,
+                projection: "EPSG:4326",
                 center: [0,0],
                 rotation: 0,
                 features: [],
@@ -271,7 +196,7 @@
                 shellfish_none_marker_icon: ShellfishNoneMarkerIcon,
                 motemarine_marker_icon: MoteMarineBeachAmbassadorIcon,
                 shellcast_marker_icon: ShellcastIcon,
-                latest_sample_date: '1970-10-21'
+                latest_sample_date: ''
             }
         },
         created() {
@@ -303,6 +228,27 @@
                 DataAPI.GetSitesPromise(location_site_name, '', true, true).then(features => {
                     console.debug("Retrieved: " + features.data.sites.features.length + " features");
                     vm.features = features.data.sites.features;
+                    //Store the feature data.
+                    let latest_sample_date = undefined;
+                    features.data.sites.features.forEach(feature => {
+                      this.$store.commit('updateStationData', feature);
+                      let site_type = feature.properties.site_type;
+                      if(site_type in feature.properties && site_type == "Water Quality")
+                      {
+                        let sample_date = moment(feature.properties[site_type].advisory.date);
+                        if(latest_sample_date != undefined)
+                        {
+                          if(sample_date > latest_sample_date) {
+                            latest_sample_date = sample_date;
+                          }
+                        }
+                        else
+                        {
+                          latest_sample_date = sample_date;
+                        }
+                      }
+                      vm.latest_sample_date = latest_sample_date.format("YYYY-MM-DD");
+                    });
                     if('limits' in features.data.advisory_info) {
                         this.$store.commit('updateAdvisoryLimits', features.data.advisory_info.limits);
                     }
@@ -382,14 +328,18 @@
                 }
 
             },
-            //pointOnSurface: findPointOnSurface,
-            overrideStyleFunction(feature, style) {
+            overrideStyleFunction(vector_feature, style) {
                 var vm = this;
                 if(vm.features_styled < vm.features.length) {
                     vm.features_styled += 1;
                 }
-                let icon_scale = 0.75;
-                let properties = feature.getProperties().properties;
+                let vector_properties = vector_feature.getProperties();
+                let feature = undefined;
+                if(vector_properties.id in this.$store.state.station_data) {
+                  feature = this.$store.state.station_data[vector_properties.id];
+                }
+                let properties = feature.properties;
+                let icon_scale = 1.0;
                 let site_type = properties.site_type;
                 let icon = new Icon({
                     src: vm.none_marker_icon,
@@ -420,8 +370,10 @@
                                         });
                                     }
                                 }
-                            } else {
-                                console.debug("Feature: " + feature.getId() + " No advisory data found.");
+                            }
+                            else {
+                                console.debug("Feature: " + feature.id + " No advisory data found.");
+                                //console.debug("Feature: " + feature.getId() + " No advisory data found.");
                             }
                         } else {
                             icon = new Icon({
@@ -468,13 +420,33 @@
 
                 }
 
-                let icon_style = [
-                    new Style({
-                        image: icon,
-                    })
-                ];
-                icon_style;
                 style.setImage(icon);
+            },
+            extent_style_function(vector_feature, style)
+            {
+              console.log("extent_style_function started.");
+              let vector_id = vector_feature.getProperties().id;
+              let feature = undefined;
+              if(vector_id in this.$store.state.station_data) {
+                feature = this.$store.state.station_data[vector_id];
+              }
+              //We style the extents based on the sample data. Green if the sample data is under the threshold, orange
+              //if over.
+              let style_color = '#999999';
+              if(feature !== undefined) {
+                let properties = feature.properties;
+                let site_type = properties.site_type;
+                if ('advisory' in properties[site_type]) {
+                  let value = properties[site_type].advisory.value;
+                  let hi_limit = this.$store.state.advisory_limits.hi;
+                  style_color = '#96ca2d';
+                  if (value >= hi_limit.minimum) {
+                    style_color = '#ee8b19';
+                  }
+                }
+              }
+              let stroke = new Stroke({color: style_color, width: 3});
+              style.setStroke(stroke);
             },
             sidebarButtonClick() {
                 this.sidebarActive = !this.sidebarActive;
@@ -505,7 +477,13 @@
             This allows us to dynamically choose the popup to use based on the site_type field.
             */
 
-            getPopupComponent(feature) {
+            getPopupComponent(vector_feature) {
+                let feature = undefined;
+                let vector_id = vector_feature.id;
+                if(vector_id in this.$store.state.station_data)
+                {
+                  feature = this.$store.state.station_data[vector_id];
+                }
                 if(feature !== undefined) {
                     if (feature.properties.site_type == "Water Quality") {
                         let name = 'StationPage';
@@ -605,6 +583,13 @@
 
 </style>
 <style scoped>
+  .remove-all-margin-padding{
+    margin:0 !important;
+    padding:0 !important;
+  }
+    .navbar-sample-date {
+      text-align: center;
+    }
     .wrapper {
         display: flex;
         width: 100%;

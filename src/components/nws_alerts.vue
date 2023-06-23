@@ -4,10 +4,12 @@
       <div class="col-sm-3 fs-5">
         Temperature: {{current_air_temperature}}
       </div>
-      <div class="col-sm-3  fs-5">
+      <div class="col-sm-3 fs-5">
         Wind: {{current_wind_speed_direction}}
       </div>
     </div>
+    <USGSSitePage :p_usgs_site="p_usgs_site" :p_parameters="p_usgs_site_parameters"></USGSSitePage>
+
     <div v-if="tide_chart_data !== undefined">
       <div class="row">
         <div class="col fs-4" >
@@ -77,6 +79,7 @@
   import NWSApi from "@/utilities/nws_rest_api";
   import DataAPI from "@/utilities/rest_api";
   import nws_alert from "@/utilities/nws_classes";
+  import USGSSitePage from "@/components/usgs_site";
   import {compass_array} from "@/utilities/direction_to_compass";
 
   import moment from "moment";
@@ -86,15 +89,19 @@
       props: {
         'longitude': {type: Number, default: undefined},
         'latitude': {type: Number, default: undefined},
-        'post_code': {type: String, default: undefined},
+        'p_post_code': {type: String, default: undefined},
         'p_query_tide_data': {type: Boolean, default: false},
-        'p_add_rip_current_info': {type: Boolean, default: false}
+        'p_add_rip_current_info': {type: Boolean, default: false},
+        'p_usgs_site': {type: String, default: undefined},
+        'p_usgs_site_parameters': {type: String, default: undefined}
+
       },
     components: {
       RipCurrentModal,
       NWSForecastBlock,
       TideChartBlock,
-      UVIndexModal
+      UVIndexModal,
+      USGSSitePage
     },
     data() {
       return {
@@ -110,6 +117,7 @@
         point_information: undefined,
         closet_obs_station: undefined,
         latest_obs_data: undefined,
+        post_code: undefined,
         show_uv_index_modal: false,
         uv_index_data: undefined,
         current_uv_index: undefined,
@@ -126,6 +134,7 @@
     mounted() {
       let vm = this;
       console.debug("NWSAlertsPage mounted.");
+      this.post_code = this.p_post_code;
       /*
       We do the point query to get the links for the forecast and observation links for the grid.
       */
@@ -199,14 +208,7 @@
           console.error(error);
         }
       });
-
       /*
-      NWSApi.GetNWSZones({longitude: this.longitude, latitude: this.latitude}).then((zone_data)=>{
-        zone_data;
-        vm;
-      });
-      */
-      //{longitude: this.longitude, latitude: this.latitude, event: 'Rip Current Statement'}
       NWSApi.GetNWSActiveAlerts({longitude: this.longitude, latitude: this.latitude}).then(alerts => {
         vm.rip_current_alert =
         vm.surf_alert = 'No Alerts';
@@ -246,13 +248,22 @@
         vm.surf_alert_details = '';
         DataAPI.error_handler('GetNWSActiveAlerts', error);
       });
-      NWSApi.EPAGetUVIndex({post_code: this.post_code}).then(uv_index => {
+      */
+      let uv_index = this.$store.getters.getUVIndex(this.post_code);
+      if(uv_index == undefined) {
+        NWSApi.EPAGetUVIndex({post_code: this.post_code}).then(uv_index => {
+          vm.uv_index_data = uv_index;
+          vm.$store.commit('setUVIndex', { zipcode: vm.post_code, index: uv_index });
+          vm.find_uv_index();
+        }).catch(error => {
+          vm.uv_index_data = undefined;
+          DataAPI.error_handler('EPAGetUVIndex', error);
+        });
+      }
+      else {
         vm.uv_index_data = uv_index;
         vm.find_uv_index();
-      }).catch(error => {
-        vm.uv_index_data = undefined;
-        DataAPI.error_handler('EPAGetUVIndex', error);
-      });
+      }
       if(vm.query_tide_data) {
           NWSApi.NOAAFindTideStation(this.latitude, this.longitude, 20).then(tide_stations => {
               this.tide_station = undefined;
