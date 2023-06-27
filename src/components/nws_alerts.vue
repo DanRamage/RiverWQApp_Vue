@@ -1,5 +1,14 @@
 <template>
   <div>
+
+    <div class="row">
+      <div class="col-sm-12 fs-4">
+        <a @click="show_current_conditions_modal=true">
+          Current Conditions
+          <i class="bi bi-info-circle info-icon"></i>
+        </a>
+      </div>
+    </div>
     <div class="row">
       <div class="col-sm-3 fs-5">
         Temperature: {{current_air_temperature}}
@@ -9,7 +18,13 @@
       </div>
     </div>
     <USGSSitePage :p_usgs_site="p_usgs_site" :p_parameters="p_usgs_site_parameters"></USGSSitePage>
+    <CurrentConditionsIndexModal  v-show="show_current_conditions_modal"
+                                  @close-current-conditions-modal="show_current_conditions_modal = false"
+                                  :p_nws_site="nws_site_name" :p_nws_site_url="nws_site_url"
+                                  :p_usgs_site="p_usgs_site" :p_usgs_site_url="usgs_site_url">
+    </CurrentConditionsIndexModal>
 
+    <hr>
     <div v-if="tide_chart_data !== undefined">
       <div class="row">
         <div class="col fs-4" >
@@ -54,6 +69,7 @@
         <UVIndexModal current_uv_index="current_uv_index_rating" v-show="show_uv_index_modal" @close-uv-index-modal="show_uv_index_modal = false"></UVIndexModal>
       </div>
     </div>
+    <hr>
     <div v-if="forecast_record !== undefined" class="row mt-3">
       <div class="col-sm-3">
         <NWSForecastBlock forecast_block_id="forecast_0" :forecast="forecast_period(0)"></NWSForecastBlock>
@@ -76,6 +92,7 @@
   import NWSForecastBlock from "@/components/nws_forecast_block";
   import TideChartBlock from "@/components/tide_prediction";
   import UVIndexModal from "@/components/uv_index_modal";
+  import CurrentConditionsIndexModal from "@/components/current_conditions_modal";
   import NWSApi from "@/utilities/nws_rest_api";
   import DataAPI from "@/utilities/rest_api";
   import nws_alert from "@/utilities/nws_classes";
@@ -87,13 +104,21 @@
   export default {
     name: 'NWSAlertsPage',
       props: {
+        //The GPS coordinates of the sampling site.
         'longitude': {type: Number, default: undefined},
         'latitude': {type: Number, default: undefined},
+        //The postal code of the sampling site. This is used to get the UV Index.
         'p_post_code': {type: String, default: undefined},
+        //Flag that specifies whether we get the tide data. For inland projects, we aren't
+        //going to be doing this.
         'p_query_tide_data': {type: Boolean, default: false},
+        //Flag that specifies whether we get the rip current data. For inland projects, we aren't
+        //going to be doing this.
         'p_add_rip_current_info': {type: Boolean, default: false},
+        //This is the USGS site, if there is one, for the river gage information.
         'p_usgs_site': {type: String, default: undefined},
-        'p_usgs_site_parameters': {type: String, default: undefined}
+        'p_usgs_site_parameters': {type: String, default: undefined},
+        'p_usgs_site_url': {type: String, default: "https://waterdata.usgs.gov/monitoring-location"}
 
       },
     components: {
@@ -101,7 +126,8 @@
       NWSForecastBlock,
       TideChartBlock,
       UVIndexModal,
-      USGSSitePage
+      USGSSitePage,
+      CurrentConditionsIndexModal
     },
     data() {
       return {
@@ -115,7 +141,7 @@
         nws_alerts: [],
         forecast_record: undefined,
         point_information: undefined,
-        closet_obs_station: undefined,
+        closest_obs_station: undefined,
         latest_obs_data: undefined,
         post_code: undefined,
         show_uv_index_modal: false,
@@ -125,7 +151,8 @@
         current_uv_color_class: '',
         query_tide_data: false,
         tide_station: undefined,
-        tide_chart_data: undefined
+        tide_chart_data: undefined,
+        show_current_conditions_modal: false
       }
     },
     created() {
@@ -134,6 +161,7 @@
     mounted() {
       let vm = this;
       console.debug("NWSAlertsPage mounted.");
+
       this.post_code = this.p_post_code;
       /*
       We do the point query to get the links for the forecast and observation links for the grid.
@@ -143,49 +171,58 @@
         {
           vm.point_information = point_info
           NWSApi.GetObservingStationsforGrid(vm.point_information.observationStations).then(station_list => {
-            vm.closet_obs_station = station_list.features[0];
-            NWSApi.GetNWSStationLatestObservations({station_code: vm.closet_obs_station.properties.stationIdentifier})
-                .then(obs_data => {
-                  vm.latest_obs_data = obs_data;
-                })
-            vm.forecast_record = undefined;
-            NWSApi.GetNWSForecast({url:vm.point_information.forecast}).then(forecast => {
-              if(forecast != undefined)
-              {
-                if('properties' in forecast)
-                {
-                  vm.forecast_record = forecast.properties;
-                }
-                else {
-                  if ('status' in forecast) {
-                    console.error("Status: " + forecast.status + " " + forecast.detail);
-                  }
-                  else {
-                    console.error("Failed to retrieve the forecast, no data payload or error payload.");
-
-                  }
-                }
-              }
-            }).catch(error=> {
+            vm.closest_obs_station = station_list.features[0];
+            //Let's see if we have this station saved.
+            let nws_station_data = vm.$store.getters.getObservingStationData(vm.closest_obs_station.properties.stationIdentifier);
+            if(nws_station_data == undefined) {
+              NWSApi.GetNWSStationLatestObservations({station_code: vm.closest_obs_station.properties.stationIdentifier})
+                  .then(obs_data => {
+                    vm.latest_obs_data = obs_data;
+                  });
               vm.forecast_record = undefined;
-              let error_message = '';
-              let status_code = 404;
-              if ('response' in error && error.response !== undefined) {
-                status_code = error.response.status;
-                if ('error' in error.response.data) {
-                  if ('message' in error.response.data.error) {
-                    error_message = error.response.data.error.message;
-                  }
-                } else {
-                  error_message = error.response.data;
-                }
-                console.error("Status code: " + status_code + ". Error Msg: " + error_message);
-              } else {
-                console.error(error);
-              }
-            });
+              NWSApi.GetNWSForecast({url: vm.point_information.forecast}).then(forecast => {
+                if (forecast != undefined) {
+                  if ('properties' in forecast) {
+                    vm.forecast_record = forecast.properties;
+                    //Let's store all this in the timed cache
+                    let data_payload = {observation_data: vm.latest_obs_data, forecast_data: vm.forecast_record};
+                    vm.$store.commit('setObservingStationData',
+                        {station: vm.closest_obs_station.properties.stationIdentifier, data: data_payload})
+                  } else {
+                    if ('status' in forecast) {
+                      console.error("Status: " + forecast.status + " " + forecast.detail);
+                    } else {
+                      console.error("Failed to retrieve the forecast, no data payload or error payload.");
 
-            })
+                    }
+                  }
+                }
+              }).catch(error => {
+                vm.forecast_record = undefined;
+                let error_message = '';
+                let status_code = 404;
+                if ('response' in error && error.response !== undefined) {
+                  status_code = error.response.status;
+                  if ('error' in error.response.data) {
+                    if ('message' in error.response.data.error) {
+                      error_message = error.response.data.error.message;
+                    }
+                  } else {
+                    error_message = error.response.data;
+                  }
+                  console.error("Status code: " + status_code + ". Error Msg: " + error_message);
+                } else {
+                  console.error(error);
+                }
+              });
+            }
+            //WE have the data cached, so let's set our variables.
+            else {
+              vm.latest_obs_data = nws_station_data['observation_data'];
+              vm.forecast_record = nws_station_data['forecast_data'];
+            }
+
+          });
         }
         else {
           console.error("GetNWSPointInformation returned undefined.")
@@ -382,6 +419,31 @@
       },
     },
     computed: {
+      nws_site_name: function() {
+        let site_name = undefined;
+        if(this.closest_obs_station != undefined) {
+          site_name = this.closest_obs_station.properties.stationIdentifier;
+        }
+        return(site_name);
+      },
+      //This is the Web url for the NWS site. It emaulates a click on their map page with a GPS coord.
+      nws_site_url: function() {
+        let url = undefined;
+        if(this.latitude != undefined && this.longitude != undefined)
+        {
+          url = "https://forecast.weather.gov/MapClick.php?lat=" + this.latitude + "&lon=" + this.longitude;
+        }
+        console.log("NWS site url: " + url);
+        return(url);
+      },
+      usgs_site_url: function() {
+        let url = undefined;
+        if(this.p_usgs_site != undefined) {
+          url = this.p_usgs_site_url + "/" + this.p_usgs_site;
+        }
+        console.log("USGS site url: " + url);
+        return(url);
+      },
       current_wind_speed_direction: function() {
         if(this.latest_obs_data != undefined)
         {

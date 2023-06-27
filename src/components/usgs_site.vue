@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <div class="row">
-      <div class="col-sm-3 fs-5">
-        Water Temperature: {{current_water_temperature}}
-      </div>
-      <div class="col-sm-3  fs-5">
-        Discharge: {{current_discharge}}
-      </div>
+  <div class="row">
+    <div class="col-sm-3 fs-5">
+      Water Temperature: {{current_water_temperature}}
+    </div>
+    <div class="col-sm-3  fs-5">
+      Discharge: {{current_discharge}}
     </div>
   </div>
 </template>

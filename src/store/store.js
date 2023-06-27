@@ -10,8 +10,6 @@ const store = createStore({
         sites: undefined,
         site_message: undefined,
         station_data: {},
-        external_site_data: {}, // Use this store to keep data we query from places like NWS or USGS instead of
-                                //requerying more often than needed. We'll invalidate these after an amount of time.
 
         //Make a timed cache for the UV indexes. Many stations are in same zipcode, so no need to keep hitting REST request.
         uv_index_cache: new Cache({defaultTtl: 300 * 1000}),
@@ -46,7 +44,7 @@ const store = createStore({
             try {
                 let zipcode = data['zipcode'];
                 let uv_index = data['index'];
-                console.log("setUVIndex for zipcode: " + zipcode);
+                console.debug("setUVIndex for zipcode: " + zipcode);
                 state.uv_index_cache.put(zipcode, uv_index);
             }
             catch(e) {
@@ -57,7 +55,7 @@ const store = createStore({
             try {
                 let station = station_data['station'];
                 let data = station_data['data'];
-                console.log("setStationData for station: " + station);
+                console.debug("setStationData for station: " + station);
                 state.observing_stations_cache.put(station, data);
             }
             catch(e) {
@@ -69,12 +67,12 @@ const store = createStore({
 
     getters: {
         getUVIndex: (state) => (zipcode) => {
-            console.log("getUVIndex for zipcode: " + zipcode);
+            console.debug("getUVIndex for zipcode: " + zipcode);
             let uv_index = undefined;
             try {
                 uv_index = state.uv_index_cache.get(zipcode);
                 if(uv_index == undefined) {
-                    console.log("getUVIndex no UV index stored for zipcode: " + zipcode);
+                    console.debug("getUVIndex no UV index stored for zipcode: " + zipcode);
                 }
 
             }
@@ -84,12 +82,12 @@ const store = createStore({
             return(uv_index);
         },
         getObservingStationData: (state) => (station_name) => {
-            console.log("getObservingStationData for station: " + station_name);
+            console.debug("getObservingStationData for station: " + station_name);
             let station_data = undefined;
             try {
                 station_data = state.observing_stations_cache.get(station_name);
                 if(station_data == undefined) {
-                    console.log("getObservingStationData no data stored for station: " + station_name);
+                    console.debug("getObservingStationData no data stored for station: " + station_name);
                 }
 
             }

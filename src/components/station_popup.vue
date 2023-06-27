@@ -225,7 +225,6 @@
       <div class="row gy-0">
         <div class="col-sm-12">
           <hr>
-          <div class="fs-4">Current Conditions</div>
           <div v-if="site_feature !== undefined">
             <NWSAlerts :latitude="site_latitude"
                        :longitude="site_longitude"
@@ -296,6 +295,7 @@ export default {
       graph_width: 250,
       graph_height: 250,
       feature_data: undefined,
+      time_series_data: undefined,
       activeBtn: 60,
       chartTypeBtn: 'pie',
       //graph_data: [],
@@ -451,8 +451,12 @@ export default {
   mounted() {
     console.debug("StationGraph mounted.");
     let vm = this;
+    //We could have data passed in from the props if the user navigated here from the map.
+    //If we don't we'll query and get it since we know the area and the sample site from the
+    //url.
     this.site_name_data = this.site_name;
     this.site_id_data = this.site_id;
+    this.feature_data = this.feature;
     if (this.site_name_data === undefined) {
       this.site_name_data = this.$store.state.site_name;
       this.site_id_data = this.$store.state.station_name;
@@ -574,10 +578,10 @@ export default {
       this.scatter_plot_data = [];
       DataAPI.GetSiteData(location_site_name, this.site_id_data, start_date, end_date)
           .then(response => {
-            vm.feature_data = response.data;
-            let site_type = vm.feature_data.properties.site_type;
-            if (site_type in vm.feature_data.properties) {
-              vm.feature_data.properties[site_type].advisory.results.forEach(function (rec) {
+            vm.time_series_data = response.data;
+            let site_type = vm.time_series_data.properties.site_type;
+            if (site_type in vm.time_series_data.properties) {
+              vm.time_series_data.properties[site_type].advisory.results.forEach(function (rec) {
                 let date_val = moment(rec.date);
                 vm.scatter_plot_data.push([date_val.valueOf(), rec.value]);
               });
@@ -695,7 +699,7 @@ export default {
       }
       return ("");
     },
-    usgs_site_id :function() {
+    usgs_site_id: function() {
       let site_id = undefined;
       if (this.feature_data !== undefined) {
         if('site_observations' in this.feature_data.properties &&
@@ -703,6 +707,7 @@ export default {
           site_id = this.feature_data.properties['site_observations']['usgs_sites']['site_id']
         }
       }
+      console.debug("usgs_site_id: " + site_id);
       return(site_id);
     },
     usgs_site_parameters :function() {
