@@ -5,17 +5,20 @@ import store from "@/store/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'typeface-montserrat/index.css';
-import VueGtag from 'vue-gtag-next';
+//import VueGtag from 'vue-gtag-next';
 
 const app = createApp(App);
 
 app.use(router);
 app.use(store);
+/*
 app.use(VueGtag, {
   property: {
     id: 'UA-3652063-4'
   }
 });
+*/
+
 app.component('App', App);
 app.mount('#app');
 

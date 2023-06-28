@@ -6,7 +6,7 @@
                   <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
                   How's My SC River
                 </a>
-              <span class="me-auto navbar-sample-date text-white font-avenir">Latest Sample: {{latest_sample_date}}</span>
+              <span id="latest_sample" class="me-auto navbar-sample-date text-white font-avenir">Latest Sample: {{latest_sample_date}}</span>
               <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown me-4">
@@ -36,19 +36,23 @@
         </nav>
         <main class="container-fluid remove-all-margin-padding" role="main">
             <ol-map ref="site_map"
-                    style="width: 100%; height: 100%; position:absolute"
+                    id="site_map"
+                    style="position:absolute"
                     :loadTilesWhileAnimating="true"
                     :loadTilesWhileInteracting="true">
                 <ol-view ref="site_view"
                          :rotation="rotation"
                          :projection="projection"
+                         @centerChanged="center_changed"
                          >
                 </ol-view>
                 <ol-tile-layer ref="google_layer">
-                    <ol-source-xyz :url="current_layer_url"/>
+                    <ol-source-xyz ref="google_layer_source" :url="current_layer_url"
+                                   >
+                    </ol-source-xyz>
                 </ol-tile-layer>
                 <ol-tile-layer ref="osm_layer">
-                    <ol-source-osm />
+                    <ol-source-osm @tileloadstart="tile_load_start" @tileloadend="tile_load_end"/>
                 </ol-tile-layer>
 
                 <ol-vector-layer ref="sites_vector_layer" zIndex="10">
@@ -115,6 +119,7 @@
             <span ref="visible_xlg" class="d-none d-xl-block">
             </span>
         </span>
+      <div :id="is_finished"></div>
     </div>
 </template>
 
@@ -131,7 +136,7 @@
     import DataAPI from "../utilities/rest_api";
     import FeatureUtils from "../utilities/feature_funcs";
     import CameraPopupBasic from "@/components/camera_popup_basic";
-    import EventUtils from "../utilities/analytics_funcs";
+    //import EventUtils from "../utilities/analytics_funcs";
 
     import IconsLegend from "@/components/icons_legend";
 
@@ -196,7 +201,10 @@
                 shellfish_none_marker_icon: ShellfishNoneMarkerIcon,
                 motemarine_marker_icon: MoteMarineBeachAmbassadorIcon,
                 shellcast_marker_icon: ShellcastIcon,
-                latest_sample_date: ''
+                latest_sample_date: '',
+                samples_sites_screen_fitted: false,
+                tiles_load_count: undefined,
+                tiles_load_finished: false
             }
         },
         created() {
@@ -219,7 +227,8 @@
             this.current_layer_url = `https://mt1.google.com/vt/lyrs=${this.current_google_layer}&x={x}&y={y}&z={z}`;
             this.$refs.osm_layer.tileLayer.setVisible(false);
             this.$refs.google_layer.tileLayer.setVisible(true);
-
+            //this.$refs.google_layer_source.source.on('tileloadstart', this.tile_load_start);
+            //this.$refs.google_layer_source.source.on('tileloadend', this.tile_load_end);
             let path = window.location.pathname;
             if (path.length) {
                 let location_site_name = this.$store.state.site_name;
@@ -265,6 +274,7 @@
                             let extent_poly = fromExtent(feature_extent);
                             extent_poly.scale(1.25);
                             vm.$refs.site_view.fit(extent_poly, vm.$refs.site_map.map.getSize());
+                            vm.samples_sites_screen_fitted = true;
                         }
                     }, 100);
                 })
@@ -301,6 +311,25 @@
             window.removeEventListener("resize", this.resizeHandler);
         },
         methods: {
+            center_changed(evt) {
+              evt;
+              console.debug("center_changed started");
+              this.tiles_load_finished = true;
+            },
+            tile_load_start(evt) {
+              evt;
+              this.tiles_load_count += 1;
+              console.debug("tile_load_start started, count: " + this.tiles_load_count);
+            },
+            tile_load_end(evt) {
+              evt;
+              this.tiles_load_count -= 1;
+              console.debug("tile_load_end started, count: " + this.tiles_load_count);
+              if(this.tiles_load_count <= 0)
+              {
+                this.tiles_load_finished = true;
+              }
+            },
             feature_select(feature) {
                 this.current_selected_feature = undefined;
                 if(feature.selected.length) {
@@ -487,7 +516,7 @@
                 if(feature !== undefined) {
                     if (feature.properties.site_type == "Water Quality") {
                         let name = 'StationPage';
-                        EventUtils.log_event(this.$gtag, 'click', 'WQ Station', feature.properties.description, 0);
+                        //EventUtils.log_event(this.$gtag, 'click', 'WQ Station', feature.properties.description, 0);
                         this.$router.push({
                             name: name,
                             params: {
@@ -505,6 +534,13 @@
             }
         },
         computed: {
+            is_finished: function() {
+              let id="";
+              if(this.tiles_load_finished && this.samples_sites_screen_fitted) {
+                id="load_finished";
+              }
+              return(id);
+            },
             show_popup: function() {
                 let show = false;
                 if(this.current_selected_feature !== undefined) {
@@ -539,6 +575,7 @@
         },
         watch: {
         }
+
     }
 </script>
 <style>
@@ -583,6 +620,13 @@
 
 </style>
 <style scoped>
+  #site_map {
+    /* configure the size of the map */
+    width: 100%;
+    //Set the map height based on 100% height - the height of the navbar.
+    height: calc(100% - 76px);
+    position: absolute;
+  }
   .remove-all-margin-padding{
     margin:0 !important;
     padding:0 !important;
