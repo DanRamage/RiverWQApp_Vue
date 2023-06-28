@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="row">
       <div class="col-sm-12 fs-4">
         <a @click="show_current_conditions_modal=true">
@@ -24,7 +23,6 @@
                                   :p_usgs_site="p_usgs_site" :p_usgs_site_url="usgs_site_url">
     </CurrentConditionsIndexModal>
 
-    <hr>
     <div v-if="tide_chart_data !== undefined">
       <div class="row">
         <div class="col fs-4" >
@@ -69,19 +67,20 @@
         <UVIndexModal current_uv_index="current_uv_index_rating" v-show="show_uv_index_modal" @close-uv-index-modal="show_uv_index_modal = false"></UVIndexModal>
       </div>
     </div>
-    <hr>
-    <div v-if="forecast_record !== undefined" class="row mt-3">
-      <div class="col-sm-3">
-        <NWSForecastBlock forecast_block_id="forecast_0" :forecast="forecast_period(0)"></NWSForecastBlock>
-      </div>
-      <div class="col-sm-3">
-        <NWSForecastBlock forecast_block_id="forecast_1" :forecast="forecast_period(1)"></NWSForecastBlock>
-      </div>
-      <div class="col-sm-3">
-        <NWSForecastBlock forecast_block_id="forecast_2" :forecast="forecast_period(2)"></NWSForecastBlock>
-      </div>
-      <div class="col-sm-3">
-        <NWSForecastBlock forecast_block_id="forecast_3" :forecast="forecast_period(3)"></NWSForecastBlock>
+    <div v-if="forecast_record !== undefined">
+      <div class="row mt-3">
+        <div class="col-sm-3">
+          <NWSForecastBlock forecast_block_id="forecast_0" :forecast="forecast_period(0)"></NWSForecastBlock>
+        </div>
+        <div class="col-sm-3">
+          <NWSForecastBlock forecast_block_id="forecast_1" :forecast="forecast_period(1)"></NWSForecastBlock>
+        </div>
+        <div class="col-sm-3">
+          <NWSForecastBlock forecast_block_id="forecast_2" :forecast="forecast_period(2)"></NWSForecastBlock>
+        </div>
+        <div class="col-sm-3">
+          <NWSForecastBlock forecast_block_id="forecast_3" :forecast="forecast_period(3)"></NWSForecastBlock>
+        </div>
       </div>
     </div>
   </div>

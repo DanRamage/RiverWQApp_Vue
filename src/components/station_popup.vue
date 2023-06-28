@@ -24,7 +24,7 @@
       </div>
     </nav>
 
-    <main class="container-fluid page-background data-graph">
+    <main id="site_page" class="container-fluid page-background data-graph">
       <div class="row mt-3">
         <div class="col-sm-12 mt-5">
           <div class="fs-4">
@@ -113,128 +113,14 @@
           </div>
         </div>
       </div>
-      <!---
-      <div class="row gy-0">
-        <div class="col-12">
-          <hr>
-          <div class="row">
-            <div v-if="hasNowcastData">
-              <div class="col mt-3">
-                <div class="fs-6">
-                  <a @click="clickNowCastInfo">Nowcast <i class="bi bi-info-circle info-icon"></i></a>
-                </div>
-                <p>
-                  <span class="ms-5 fs-6">Nowcast for {{ nowcastsDate }}: <span :class="alert_text_color(nowcastsValue)"> {{ nowcastsValue }}</span></span>
-                  <br>
-                  <span class="ml-4 avenir-font-light"></span>
-                  <br>
-                  <b v-if='isDataFresh("nowcasts") == false' class="ml-4 avenir-font-light text-danger">RESULTS ARE OUT OF
-                    DATE</b>
-                </p>
-              </div>
-              <NowcastInfoModal ref="nowcast_modal" v-show="showNowCastModal" @close-nowcast-modal="showNowCastModal = false" />
-            </div>
-          </div>
-        </div>
-      </div>
-      --->
-      <!---
-      Water quality data row
-      --->
-      <!---
-      <div class="row gy-0">
-        <div class="col-sm-12">
-          <hr>
-          <div class="fs-6">
-            <a @click="bacteriaPopup">Sampled Bacteria Data <i class="bi bi-info-circle info-icon"></i></a>
-          </div>
-          <div v-if="!loading">
-            <div v-if="hasAdvisoryData" class="row">
-              <div class="col-sm-4">
-                <div class="ms-5 fs-6">
-                  Bacteria Data for {{ advisoryDate }}: <span :class="alert_text_color(advisoryValue)">{{ advisoryValue }}</span>
-                </div>
-                <div class="ms-5 fs-6">
-                  <b v-if='isDataFresh("advisory") == false' class="avenir-font-light text-danger">RESULTS ARE OUT OF
-                    DATE</b>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <h5 class="montserat-font">Bacteria Data Graph</h5>
-                <div class="row mb-1">
-                  <div class="col-sm-5">
-                    <div class="montserat-font">Data Time Period</div>
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                      <option value="30" @click="daysButtonClick($event, 30)">30 days</option>
-                      <option value="60" @click="daysButtonClick($event, 60)">60 days</option>
-                      <option value="90" @click="daysButtonClick($event, 90)">90 days</option>
-                      <option value="365" @click="daysButtonClick($event, 365)">365 days</option>
-                    </select>
-                  </div>
-                </div>
-                <div v-if="haveWQData" class="row">
-                  <div class="col" v-show="chartType === 'pie'">
-                    <div ref="pie_chart_column" class="full-graph">
-                      <WQPlot ref="station_pie_chart"
-                              :chart_options="pie_chart_options"
-                              id='station_pie_chart'
-                              :station_data="pie_chart_data"
-                              height=250>
-                      </WQPlot>
-                    </div>
-                  </div>
-                  <div class="col" v-show="chartType === 'scatter'">
-                    <div ref="scatter_chart_column" class="full-graph">
-                      <WQPlot ref="station_scatter_plot"
-                              :chart_options="scatter_chart_options"
-                              id='station_scatter_plot'
-                              :station_data="scatter_plot_data"
-                              height=250>
-                      </WQPlot>
-                    </div>
-                  </div>
-                </div>
-                <div v-else class="row" style="height: 250px">
-                  <h4>No data for the time period, select a longer time period below.</h4>
-                </div>
-                <div class="row mt-1">
-                  <div class="col-sm-7">
-                    <div class="montserat-font">Chart Type</div>
+      <div v-if="site_feature !== undefined">
+        <NWSAlerts :latitude="site_latitude"
+                   :longitude="site_longitude"
+                   :p_post_code="site_post_code"
+                   :p_usgs_site="usgs_site_id"
+                   :p_usgs_site_parameters="usgs_site_parameters">
 
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="PieChart" id="piechart"
-                             @click="chartTypesButtonClick($event, 'pie')"
-                             :checked="chartTypeBtn === 'pie' ? true : false">
-                      <label class="form-check-label" for="piechart">Pie Chart</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="ScatterChart" id="scatterplot"
-                             @click="chartTypesButtonClick($event,'scatter')"
-                             :checked="chartTypeBtn === 'scatter' ? true : false">
-                      <label class="form-check-label" for="scatterplot">Scatter Plot</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <CollectionProgramModal program_type='Water Quality' v-show="showBacteriaModal" @close-collection-modal="showBacteriaModal = false"/>
-          </div>
-        </div>
-      </div>
-      --->
-      <div class="row gy-0">
-        <div class="col-sm-12">
-          <hr>
-          <div v-if="site_feature !== undefined">
-            <NWSAlerts :latitude="site_latitude"
-                       :longitude="site_longitude"
-                       :p_post_code="site_post_code"
-                       :p_usgs_site="usgs_site_id"
-                       :p_usgs_site_parameters="usgs_site_parameters">
-
-            </NWSAlerts>
-          </div>
-        </div>
+        </NWSAlerts>
       </div>
     </main>
   </div>
@@ -892,17 +778,18 @@ export default {
 }
 </script>
 <style scoped>
+#site_page {
+  /*Set the page height based on 100% height - the height of the navbar.*/
+  height: calc(100% - 76px);
+}
+
 .min-width-map-column {
   min-width: 250px;
-}
-.data-graph {
-  background-color: rgba(0, 61, 126, .85);
-  color: #003D7ED8
-  /*color: #FFFFFF*/
 }
 
 .page-background {
   background-color: #FFFFFF;
+  color: #003D7ED8
   /*background-color: #003D7ED8;*/
 }
 

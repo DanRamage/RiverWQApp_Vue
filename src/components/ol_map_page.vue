@@ -43,16 +43,15 @@
                 <ol-view ref="site_view"
                          :rotation="rotation"
                          :projection="projection"
-                         @centerChanged="center_changed"
                          >
                 </ol-view>
                 <ol-tile-layer ref="google_layer">
                     <ol-source-xyz ref="google_layer_source" :url="current_layer_url"
-                                   >
+                                   @tileloadstart="tile_load_start" @tileloadend="tile_load_end">
                     </ol-source-xyz>
                 </ol-tile-layer>
                 <ol-tile-layer ref="osm_layer">
-                    <ol-source-osm @tileloadstart="tile_load_start" @tileloadend="tile_load_end"/>
+                    <ol-source-osm/>
                 </ol-tile-layer>
 
                 <ol-vector-layer ref="sites_vector_layer" zIndex="10">
@@ -203,7 +202,7 @@
                 shellcast_marker_icon: ShellcastIcon,
                 latest_sample_date: '',
                 samples_sites_screen_fitted: false,
-                tiles_load_count: undefined,
+                tiles_load_count: 0,
                 tiles_load_finished: false
             }
         },
@@ -311,23 +310,19 @@
             window.removeEventListener("resize", this.resizeHandler);
         },
         methods: {
-            center_changed(evt) {
-              evt;
-              console.debug("center_changed started");
-              this.tiles_load_finished = true;
-            },
             tile_load_start(evt) {
               evt;
               this.tiles_load_count += 1;
-              console.debug("tile_load_start started, count: " + this.tiles_load_count);
+              //console.debug("tile_load_start started, count: " + this.tiles_load_count);
             },
             tile_load_end(evt) {
               evt;
               this.tiles_load_count -= 1;
-              console.debug("tile_load_end started, count: " + this.tiles_load_count);
+              //console.debug("tile_load_end started, count: " + this.tiles_load_count);
               if(this.tiles_load_count <= 0)
               {
                 this.tiles_load_finished = true;
+                console.debug("tile_load_end tile loading finished.");
               }
             },
             feature_select(feature) {
@@ -536,7 +531,7 @@
         computed: {
             is_finished: function() {
               let id="";
-              if(this.tiles_load_finished && this.samples_sites_screen_fitted) {
+              if(this.tiles_load_finished) {
                 id="load_finished";
               }
               return(id);
@@ -623,7 +618,7 @@
   #site_map {
     /* configure the size of the map */
     width: 100%;
-    //Set the map height based on 100% height - the height of the navbar.
+    /*Set the map height based on 100% height - the height of the navbar.*/
     height: calc(100% - 76px);
     position: absolute;
   }

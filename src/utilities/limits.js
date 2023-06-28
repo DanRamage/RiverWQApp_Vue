@@ -39,7 +39,7 @@ export default class AdvisoryLimits { // eslint-disable-line no-unused-vars
 
     }
     limit(limit_level) {
-        console.debug("AdvisoryLimits limit called: " + limit_level);
+        //console.debug("AdvisoryLimits limit called: " + limit_level);
         if(limit_level in this.limits)
         {
             return this.limits[limit_level];
