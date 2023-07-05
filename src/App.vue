@@ -11,6 +11,7 @@
     import AboutPage from "@/components/about_page";
     import MyrtleBeachAboutPage from "@/components/MyrtleBeachAbout";
     import ShellfishPage from "@/components/shellfish_page";
+    import site_analytics from "./utilities/analytics_funcs";
 
     export default {
       data() {
@@ -73,6 +74,8 @@
             let to = this.$route;
 
             console.debug("Initial url: " + to.path);
+
+            //site_analytics.page_view(to.path);
             /*
             this.$gtag.pageview({
                 page_path: to.path,
@@ -83,11 +86,13 @@
         watch: {
             '$route' (to, from) {
                 console.debug('Route changed from ' + from.path + ' to ' + to.path);
-                /*
-                this.$gtag.pageview({
-                    page_path: to.path,
-                });
-                */
+                site_analytics.page_view(to.path);
+
+              /*
+              this.$gtag.pageview({
+                  page_path: to.path,
+              });
+              */
                 this.find_component(to);
             }
         },

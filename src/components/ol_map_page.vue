@@ -157,6 +157,7 @@
     import MoteMarineBeachAmbassadorIcon from '@/assets/images/mote-beach-ambassador-25x41.png'
     import ShellcastIcon from '@/assets/images/shellcast_marker_25x25.png'
     import moment from "moment/moment";
+    import site_analytics from "../utilities/analytics_funcs";
 
     export default {
         name: 'OLMapPage',
@@ -511,6 +512,10 @@
                 if(feature !== undefined) {
                     if (feature.properties.site_type == "Water Quality") {
                         let name = 'StationPage';
+                        site_analytics.log_event('click',
+                                      'WQ Station',
+                                                    feature.properties.description,
+                                          0);
                         //EventUtils.log_event(this.$gtag, 'click', 'WQ Station', feature.properties.description, 0);
                         this.$router.push({
                             name: name,
