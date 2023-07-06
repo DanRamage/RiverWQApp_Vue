@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary blue-background_color font-avenir">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary blue-background_color font-avenir">
             <div class="container-fluid">
                 <a class="navbar-brand text-white montserat-font" href="/">
                   <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
@@ -34,7 +34,7 @@
               </button>
             </div>
         </nav>
-        <main class="container-fluid remove-all-margin-padding" role="main">
+      <main class="container-fluid remove-all-margin-padding" role="main">
             <ol-map ref="site_map"
                     id="site_map"
                     style="position:absolute"
@@ -119,7 +119,13 @@
             </span>
         </span>
       <div :id="is_finished"></div>
+      <teleport to="head">
+        <component :is="'script'" type="application/ld+json">
+          {{jsonld}}
+        </component>
+      </teleport>
     </div>
+
 </template>
 
 <script>
@@ -158,6 +164,7 @@
     import ShellcastIcon from '@/assets/images/shellcast_marker_25x25.png'
     import moment from "moment/moment";
     import site_analytics from "../utilities/analytics_funcs";
+    //import {jsonp} from "ol/net";
 
     export default {
         name: 'OLMapPage',
@@ -204,7 +211,8 @@
                 latest_sample_date: '',
                 samples_sites_screen_fitted: false,
                 tiles_load_count: 0,
-                tiles_load_finished: false
+                tiles_load_finished: false,
+                jsonld: {}
             }
         },
         created() {
@@ -227,8 +235,6 @@
             this.current_layer_url = `https://mt1.google.com/vt/lyrs=${this.current_google_layer}&x={x}&y={y}&z={z}`;
             this.$refs.osm_layer.tileLayer.setVisible(false);
             this.$refs.google_layer.tileLayer.setVisible(true);
-            //this.$refs.google_layer_source.source.on('tileloadstart', this.tile_load_start);
-            //this.$refs.google_layer_source.source.on('tileloadend', this.tile_load_end);
             let path = window.location.pathname;
             if (path.length) {
                 let location_site_name = this.$store.state.site_name;
@@ -239,6 +245,7 @@
                     vm.features = features.data.sites.features;
                     //Store the feature data.
                     let latest_sample_date = undefined;
+                    let jsonld_elements = [];
                     features.data.sites.features.forEach(feature => {
                       this.$store.commit('updateStationData', feature);
                       let site_type = feature.properties.site_type;
@@ -257,10 +264,43 @@
                         }
                       }
                       vm.latest_sample_date = latest_sample_date.format("YYYY-MM-DD");
+                      //Build jsonld
+                      jsonld_elements.push({
+                        "@type": "DataFeedItem",
+                          "name": feature.id,
+                          "description": feature.properties.description,
+                          "dateModified": feature.properties['Water Quality'].advisory.date,
+                          "keywords": "E-coli, bacteria, sampling",
+                          "item":
+                        {
+                          "@type": "Place",
+                            "geo": {
+                          "@type": "GeoCoordinates",
+                              "latitude": feature.geometry.coordinates[1],
+                              "longitude": feature.geometry.coordinates[0]
+                        }
+                        }
+                      });
                     });
                     if('limits' in features.data.advisory_info) {
                         this.$store.commit('updateAdvisoryLimits', features.data.advisory_info.limits);
                     }
+
+                  vm.jsonld =
+                      {
+                        "@context": "https://schema.org/",
+                        "@type": "Dataset",
+                        "name": "Midlands River Coalition",
+                        "description": "A variety of stakeholders have come together to start an enhanced monitoring program for the Lower Saluda Scenic River during the peak recreational season.",
+                        "url": "https://howsmyscriver.org",
+                        "keywords": "E-coli, Escherichia coli, bacteria, sampling, water quality",
+                        "item" :
+                            {
+                              "@type": "DataFeed",
+                              "dataFeedElement": jsonld_elements
+                            }
+                      }
+
                     this.site_name = features.data.project_area.name;
 
                     vm.loading =  false;
@@ -532,8 +572,12 @@
                     }
                 }
             }
+
         },
         computed: {
+            build_jsonld: function() {
+              return ""
+            },
             is_finished: function() {
               let id="";
               if(this.tiles_load_finished) {
