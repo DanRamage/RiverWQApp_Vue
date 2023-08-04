@@ -1,11 +1,9 @@
 import SplashPage from '@/components/splash_page'
 import OLMapPage from '@/components/ol_map_page'
 import StationGraph from '@/components/station_graph'
-import CameraGraph from '@/components/camera_graph'
 import ErrorPage from '@/components/error_page'
 import AboutPage from '@/components/about_page'
 import StationPage from '@/components/station_popup'
-import ShellfishPage from '@/components/shellfish_page'
 
 import { createRouter, createWebHistory } from 'vue-router';
 export const routes = [
@@ -35,22 +33,15 @@ export const routes = [
                     component: StationPage,
                     name: 'StationPage',
                     props: true
-                },
-                {
-                    path: 'shellfishinfo/:p_site_id',
-                    component: ShellfishPage,
-                    name: 'ShellfishPage',
-                    props: true
-                },
-                {
-                    path: 'cameragraph/:camera_name',
-                    component: CameraGraph,
-                    name: 'CameraGraph',
-                    props: true
                 }
 
             ]
-
+        },
+        /*This is to take into account search engines caching the path structure for the old site,
+        howsmyscriver.org/midlands. This redirects that path to the map.*/
+        {
+            path: '/:location',
+            redirect: {name: 'OLMapPage'}
         },
         {
             path: '/page error',

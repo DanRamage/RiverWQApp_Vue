@@ -104,20 +104,19 @@
         </div>
     </main>
 
-
-    <!-- This gives us the ability to know when the media queries/breaks occur -->
-        <span ref="mq_detector" id="mq-detector">
-            <span ref="visible_xs" class="d-block d-sm-none">
-            </span>
-            <span ref="visible_sm" class="d-none d-sm-block d-md-none">
-            </span>
-            <span ref="visible_md" class="d-none d-md-block d-lg-none">
-            </span>
-            <span ref="visible_lg" class="d-none d-lg-block d-xl-none">
-            </span>
-            <span ref="visible_xlg" class="d-none d-xl-block">
-            </span>
-        </span>
+      <!-- This gives us the ability to know when the media queries/breaks occur -->
+      <span ref="mq_detector" id="mq-detector">
+          <span ref="visible_xs" class="d-block d-sm-none">
+          </span>
+          <span ref="visible_sm" class="d-none d-sm-block d-md-none">
+          </span>
+          <span ref="visible_md" class="d-none d-md-block d-lg-none">
+          </span>
+          <span ref="visible_lg" class="d-none d-lg-block d-xl-none">
+          </span>
+          <span ref="visible_xlg" class="d-none d-xl-block">
+          </span>
+      </span>
       <div :id="is_finished"></div>
       <teleport to="head">
         <component :is="'script'" type="application/ld+json">
@@ -270,7 +269,7 @@
                           "name": feature.id,
                           "description": feature.properties.description,
                           "dateModified": feature.properties['Water Quality'].advisory.date,
-                          "keywords": "E-coli, bacteria, sampling",
+                          "keywords": "E-coli, Escherichia coli, bacteria, sampling, water quality, Saluda River, Broad River, Congaree River, Columbia, South Carolina",
                           "item":
                         {
                           "@type": "Place",
@@ -293,7 +292,7 @@
                         "name": "Midlands River Coalition",
                         "description": "A variety of stakeholders have come together to start an enhanced monitoring program for the Lower Saluda Scenic River during the peak recreational season.",
                         "url": "https://howsmyscriver.org",
-                        "keywords": "E-coli, Escherichia coli, bacteria, sampling, water quality",
+                        "keywords": "E-coli, Escherichia coli, bacteria, sampling, water quality, Saluda River, Broad River, Congaree River, Columbia, South Carolina",
                         "item" :
                             {
                               "@type": "DataFeed",
@@ -358,12 +357,15 @@
             },
             tile_load_end(evt) {
               evt;
+              let vm = this;
               this.tiles_load_count -= 1;
               //console.debug("tile_load_end started, count: " + this.tiles_load_count);
               if(this.tiles_load_count <= 0)
               {
-                this.tiles_load_finished = true;
-                console.debug("tile_load_end tile loading finished.");
+                setTimeout(function() {
+                  vm.tiles_load_finished = true;
+                  console.debug("tile_load_end tile loading finished.");
+                }, 100);
               }
             },
             feature_select(feature) {
@@ -498,6 +500,8 @@
               //We style the extents based on the sample data. Green if the sample data is under the threshold, orange
               //if over.
               let style_color = '#999999';
+              let width = 3;
+              let z_index = 1;
               if(feature !== undefined) {
                 let properties = feature.properties;
                 let site_type = properties.site_type;
@@ -507,10 +511,13 @@
                   style_color = '#96ca2d';
                   if (value >= hi_limit.minimum) {
                     style_color = '#ee8b19';
+                    width = 3;
+                    z_index = 9999;
                   }
                 }
               }
-              let stroke = new Stroke({color: style_color, width: 3});
+              style.setZIndex(z_index);
+              let stroke = new Stroke({color: style_color, width: width});
               style.setStroke(stroke);
             },
             sidebarButtonClick() {
@@ -575,9 +582,6 @@
 
         },
         computed: {
-            build_jsonld: function() {
-              return ""
-            },
             is_finished: function() {
               let id="";
               if(this.tiles_load_finished) {
