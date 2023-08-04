@@ -43,6 +43,12 @@ export const routes = [
             path: '/:location',
             redirect: {name: 'OLMapPage'}
         },
+        /*This is to take into account search engines caching the path structure for the old site,
+        howsmyscriver.org/midlands. This redirects that path to the map.*/
+        {
+            path: '/:location/news',
+            redirect: {name: 'AboutPage'}
+        },
         {
             path: '/page error',
             name: '404',
