@@ -6,7 +6,10 @@
                   <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
                   How's My SC River
                 </a>
-              <span id="latest_sample" class="me-auto navbar-sample-date text-white font-avenir">Latest Sample: {{latest_sample_date}}</span>
+              <span class="navbar-text">
+                <span id="latest_sample" class="text-white font-avenir pe-3">Latest Sample: {{latest_sample_date}}</span>
+                <span v-if="site_message.length" id="site_message" class="text-white font-avenir">{{site_message}}</span>
+              </span>
               <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown me-4">
@@ -208,6 +211,7 @@
                 motemarine_marker_icon: MoteMarineBeachAmbassadorIcon,
                 shellcast_marker_icon: ShellcastIcon,
                 latest_sample_date: '',
+                site_message: '',
                 samples_sites_screen_fitted: false,
                 tiles_load_count: 0,
                 tiles_load_finished: false,
@@ -285,7 +289,7 @@
                         this.$store.commit('updateAdvisoryLimits', features.data.advisory_info.limits);
                     }
 
-                  vm.jsonld =
+                    vm.jsonld =
                       {
                         "@context": "https://schema.org/",
                         "@type": "Dataset",
@@ -301,7 +305,11 @@
                       }
 
                     this.site_name = features.data.project_area.name;
-
+                    if('message' in features.data.project_area) {
+                      if(features.data.project_area.message.length) {
+                        vm.site_message = features.data.project_area.message;
+                      }
+                    }
                     vm.loading =  false;
 
                     setTimeout(function() {
