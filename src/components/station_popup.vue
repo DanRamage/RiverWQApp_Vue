@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar navbar-expand-lg bg-body-tertiary blue-background_color font-avenir">
       <div class="container-fluid">
-        <a class="navbar-brand text-white montserat-font" href="#">
+        <a class="navbar-brand text-white montserat-font" href="/midlands/map">
           <img src="@/assets/images/midlands_logo_round.png" width="50" height="50" alt="">
           How's My SC River
         </a>
@@ -77,10 +77,10 @@
                     </div>
                 </div>
               </div>
-              <div class="col-sm-4">
+              <div class="col-sm-6">
                 <h5 class="avenir-font mt-3">Bacteria Data Graph</h5>
                 <div class="row mb-1">
-                  <div class="col-sm-12">
+                  <div class="col-sm-8">
                     <div class="input-group row">
                       <label class="input-group-text avenir-font-light col-sm-6">Data Time Period</label>
                       <select class="form-select avenir-font-light col-sm-6" aria-label=".form-select-sm example">
@@ -93,7 +93,7 @@
                   </div>
                 </div>
                 <div v-if="haveWQData" class="row align-items-center">
-                  <div class="col-sm-6" v-show="chartType === 'pie'">
+                  <div class="col-sm-4" v-show="chartType === 'pie'">
                       <WQPlot ref="station_pie_chart"
                               :chart_options="pie_chart_options"
                               id='station_pie_chart'
@@ -102,8 +102,16 @@
                       </WQPlot>
                   </div>
                   <div class="col-sm-6 avenir-font">
-                      Total Samples: {{total_records}}
-                      Above Limit: {{records_above_max_threshold}}
+                    <div class="row">
+                      <div class="col-sm-12">
+                        Total Samples: {{total_records}}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                      Samples Above Limit: {{records_above_max_threshold}}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -474,6 +482,8 @@ export default {
               if (vm.scatter_chart_ref !== undefined) {
                 vm.scatter_chart_ref.chart.xAxis[0].setExtremes(moment.utc().subtract(days_back, "days").valueOf(), moment.utc().valueOf());
               }
+              vm.records_above_max_threshold = 0;
+              vm.total_records = 0;
               vm.calcStats(vm, vm.scatter_plot_data);
             }
           })
@@ -482,8 +492,6 @@ export default {
     },
     calcStats(vm, data_array) {
       console.debug("calcStats called.");
-      vm.records_above_max_threshold = 0;
-      vm.total_records = 0;
       if (data_array.length) {
         data_array.forEach(function (rec) {
           if (rec[1] >= vm.$store.state.advisory_limits.hi.minimum) {
@@ -493,8 +501,8 @@ export default {
         vm.total_records = data_array.length;
         vm.pie_chart_data = [
           {
-            name: 'Sample Count',
-            y: vm.total_records,
+            name: 'Samples Below Limit',
+            y: vm.total_records - vm.records_above_max_threshold,
             color: 'green'
           },
           {
@@ -504,7 +512,7 @@ export default {
           }
         ]
         vm.percentage_exceeds = parseInt((vm.records_above_max_threshold / vm.total_records) * 100.0);
-        console.debug("Total Samples: " + vm.total_records + "Bad Samples: " + vm.records_above_max_threshold);
+        console.debug("Total Samples: " + vm.total_records + " Bad Samples: " + vm.records_above_max_threshold);
       }
     },
     onClose() {
