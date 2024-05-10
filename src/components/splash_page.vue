@@ -30,6 +30,9 @@
                     <a href="https://www.instagram.com/midlandsrivercoalition/">
                         <img class="img-rounded" src="@/assets/images/instagram_icon.png"  style="width: 30px; height: 30px;">
                     </a>
+                    <a href="https://bsky.app/profile/midlandsriver.bsky.social">
+                      <img class="img-rounded" src="@/assets/images/bluesky-logo.png"  style="width: 30px; height: 30px;">
+                    </a>
                     <a href="/static/rss/midlandsrivers.xml">
                         <img class="img-rounded" src="@/assets/images/rss_icon.png"  style="width: 30px; height: 30px;">
                     </a>
