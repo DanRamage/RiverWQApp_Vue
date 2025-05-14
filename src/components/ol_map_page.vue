@@ -143,6 +143,8 @@
     import DataAPI from "../utilities/rest_api";
     import FeatureUtils from "../utilities/feature_funcs";
     import CameraPopupBasic from "@/components/camera_popup_basic";
+    import GeneralPopupBasic from "@/components/general_popup";
+
     //import EventUtils from "../utilities/analytics_funcs";
 
     import IconsLegend from "@/components/icons_legend";
@@ -159,6 +161,7 @@
     import HiMarkerIcon from '@/assets/images/high_marker_25x25.png'
     import NoneMarkerIcon from '@/assets/images/none_marker_25x25.png'
     import CameraIcon from '@/assets/images/webcam_icon.png'
+    import PopupWarningIcon from '@/assets/images/popup_warn.png'
     import ShellfishLowMarkerIcon from '@/assets/images/shellfish_low_marker_25x25.png'
     import ShellfishHiMarkerIcon from '@/assets/images/shellfish_high_marker_25x25.png'
     import ShellfishNoneMarkerIcon from '@/assets/images/shellfish_none_marker_25x25.png'
@@ -205,6 +208,7 @@
                 hi_marker_icon: HiMarkerIcon,
                 none_marker_icon: NoneMarkerIcon,
                 camera_marker_icon: CameraIcon,
+                popup_warning_icon: PopupWarningIcon,
                 shellfish_low_marker_icon: ShellfishLowMarkerIcon,
                 shellfish_hi_marker_icon: ShellfishHiMarkerIcon,
                 shellfish_none_marker_icon: ShellfishNoneMarkerIcon,
@@ -249,7 +253,8 @@
                     //Store the feature data.
                     let latest_sample_date = undefined;
                     let jsonld_elements = [];
-                    features.data.sites.features.forEach(feature => {
+                    features.data.sites.features.forEach(feature =>
+                    {
                       this.$store.commit('updateStationData', feature);
                       let site_type = feature.properties.site_type;
                       if(site_type in feature.properties && site_type == "Water Quality")
@@ -265,25 +270,25 @@
                         {
                           latest_sample_date = sample_date;
                         }
-                      }
-                      vm.latest_sample_date = latest_sample_date.format("YYYY-MM-DD");
-                      //Build jsonld
-                      jsonld_elements.push({
-                        "@type": "DataFeedItem",
+                        //Build jsonld
+                        jsonld_elements.push({
+                          "@type": "DataFeedItem",
                           "name": feature.id,
                           "description": feature.properties.description,
                           "dateModified": feature.properties['Water Quality'].advisory.date,
                           "keywords": "E-coli, Escherichia coli, bacteria, sampling, water quality, Saluda River, Broad River, Congaree River, Columbia, South Carolina",
                           "item":
-                        {
-                          "@type": "Place",
-                            "geo": {
-                          "@type": "GeoCoordinates",
-                              "latitude": feature.geometry.coordinates[1],
-                              "longitude": feature.geometry.coordinates[0]
-                        }
-                        }
-                      });
+                              {
+                                "@type": "Place",
+                                "geo": {
+                                  "@type": "GeoCoordinates",
+                                  "latitude": feature.geometry.coordinates[1],
+                                  "longitude": feature.geometry.coordinates[0]
+                                }
+                              }
+                        });
+                      }
+                      vm.latest_sample_date = latest_sample_date.format("YYYY-MM-DD");
                     });
                     if('limits' in features.data.advisory_info) {
                         this.$store.commit('updateAdvisoryLimits', features.data.advisory_info.limits);
@@ -484,6 +489,16 @@
                         vm.legend_icons.push("Water Quality");
                     }
                 }
+                else if(site_type == 'General Popup Site') {
+                  icon = new Icon({
+                    src: vm.popup_warning_icon,
+                    scale: icon_scale
+                  });
+                  if(!(vm.legend_icons.includes('General Popup Site'))) {
+                    vm.legend_icons.push('General Popup Site');
+                  }
+
+                }
                 else if(site_type == 'Camera Site') {
                     icon = new Icon({
                         src: vm.camera_marker_icon,
@@ -585,6 +600,10 @@
                     else if (feature.properties.site_type == "Camera Site") {
                         return (CameraPopupBasic);
                     }
+                    else if(feature.properties.site_type == "General Popup Site") {
+                      return (GeneralPopupBasic);
+                    }
+
                 }
             }
 
