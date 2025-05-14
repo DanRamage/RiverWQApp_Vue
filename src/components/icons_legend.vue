@@ -27,36 +27,12 @@
                                     Water Quality Sites
                                 </li>
                         </div>
-                        <div v-if="hasIcons('Shellfish')">
-                            <li class="list-group-item">
-                                <img src="@/assets/images/shellfish_low_marker_25x25.png" class="advisory_icon mr-1">
-                                Shellfish Harvesting Sites
-                            </li>
-                        </div>
-                        <div v-if="hasIcons('Rip Current')">
-                            <li class="list-group-item">
-                                <img src="@/assets/images/ripcurrent_low_marker_25x25.png" class="advisory_icon mr-1">
-                                Rip Current Sites
-                            </li>
-                        </div>
                         <div v-if="hasIcons('Camera Site')">
                             <li class="list-group-item">
                                 <img src="@/assets/images/webcam_icon.png" class="advisory_icon mr-1">
                                 WebCOOS Cameras
                             </li>
                         </div>
-                        <div v-if="hasIcons('Beach Ambassador')">
-                          <li class="list-group-item">
-                            <img src="@/assets/images/mote-beach-ambassador-25x41.png" class="advisory_icon mr-1 mote-icon">
-                            BCRS Beach Ambassador Sites
-                          </li>
-                        </div>
-                      <div v-if="hasIcons('Shellcast')">
-                        <li class="list-group-item">
-                          <img src="@/assets/images/shellcast_marker_25x25.png" class="advisory_icon mr-1">
-                          Shellcast Forecast Sites
-                        </li>
-                      </div>
                     </ul>
                     <b>Color Codes</b>
                     <ul class="list-group list-group-flush legend-test-size">

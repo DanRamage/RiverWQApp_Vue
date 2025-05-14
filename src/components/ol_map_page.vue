@@ -162,11 +162,6 @@
     import NoneMarkerIcon from '@/assets/images/none_marker_25x25.png'
     import CameraIcon from '@/assets/images/webcam_icon.png'
     import PopupWarningIcon from '@/assets/images/popup_warn.png'
-    import ShellfishLowMarkerIcon from '@/assets/images/shellfish_low_marker_25x25.png'
-    import ShellfishHiMarkerIcon from '@/assets/images/shellfish_high_marker_25x25.png'
-    import ShellfishNoneMarkerIcon from '@/assets/images/shellfish_none_marker_25x25.png'
-    import MoteMarineBeachAmbassadorIcon from '@/assets/images/mote-beach-ambassador-25x41.png'
-    import ShellcastIcon from '@/assets/images/shellcast_marker_25x25.png'
     import moment from "moment/moment";
     import site_analytics from "../utilities/analytics_funcs";
     //import {jsonp} from "ol/net";
@@ -209,11 +204,6 @@
                 none_marker_icon: NoneMarkerIcon,
                 camera_marker_icon: CameraIcon,
                 popup_warning_icon: PopupWarningIcon,
-                shellfish_low_marker_icon: ShellfishLowMarkerIcon,
-                shellfish_hi_marker_icon: ShellfishHiMarkerIcon,
-                shellfish_none_marker_icon: ShellfishNoneMarkerIcon,
-                motemarine_marker_icon: MoteMarineBeachAmbassadorIcon,
-                shellcast_marker_icon: ShellcastIcon,
                 latest_sample_date: '',
                 site_message: '',
                 samples_sites_screen_fitted: false,

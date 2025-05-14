@@ -6,11 +6,8 @@
     import OLMapPage from "@/components/ol_map_page";
     import StationGraph from "@/components/station_graph";
     import StationPage from "@/components/station_popup";
-    import CameraGraph from "@/components/camera_graph";
     import ErrorPage from "@/components/error_page";
     import AboutPage from "@/components/about_page";
-    import MyrtleBeachAboutPage from "@/components/MyrtleBeachAbout";
-    import ShellfishPage from "@/components/shellfish_page";
     import site_analytics from "./utilities/analytics_funcs";
 
     export default {
@@ -44,19 +41,8 @@
                   this.$store.commit('updateStationName', to.params.site_id);
                   this.activeComponent = 'StationPage';
                 }
-                else if(to.name == 'ShellfishPage')
-                {
-                  //Pick apart the path and save the site name into the store so other components can use it for
-                  //API requests.
-                  this.$store.commit('updateSiteName', to.params.location);
-                  this.$store.commit('updateStationName', to.params.p_site_id);
-                  this.activeComponent = 'ShellfishPage';
-                }
                 else if (to.name == 'AboutPage') {
                   this.activeComponent = 'AboutPage';
-                }
-                else if (to.name == 'MyrtleBeachAboutPage') {
-                  this.activeComponent = 'MyrtleBeachAboutPage';
                 }
             }
         },
@@ -64,11 +50,9 @@
           SplashPage,
           StationGraph,
           StationPage,
-          CameraGraph,
           ErrorPage,
           AboutPage,
-          ShellfishPage,
-          MyrtleBeachAboutPage},
+        },
         created() {
             //We check the url we receive to see where we are going, splash page or one of the project sites.
             let to = this.$route;

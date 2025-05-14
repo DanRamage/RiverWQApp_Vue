@@ -39,6 +39,7 @@
                            style="height: 250px; width: 250px"
                            :p_site_feature="site_feature"></SingleSiteMap>
         </div>
+
         <div class="col-sm-9">
           <div v-if="hasNowcastData" class="row">
             <div class="col-sm-12 mt-3 m-lg-3">
@@ -120,6 +121,7 @@
 
           </div>
         </div>
+
       </div>
       <div v-if="site_feature !== undefined">
         <NWSAlerts :latitude="site_latitude"

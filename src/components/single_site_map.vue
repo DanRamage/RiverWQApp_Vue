@@ -38,11 +38,8 @@ import Icon from "ol/style/Icon";
 //import LowMarkerIcon from '@/assets/images/low_marker_25x25.png'
 //import HiMarkerIcon from '@/assets/images/high_marker_25x25.png'
 import NoneMarkerIcon from '@/assets/images/none_marker_25x25.png'
-import ShellfishLowMarkerIcon from '@/assets/images/shellfish_low_marker_25x25.png'
-import ShellfishHiMarkerIcon from '@/assets/images/shellfish_high_marker_25x25.png'
-import ShellfishNoneMarkerIcon from '@/assets/images/shellfish_none_marker_25x25.png'
 
-import FeatureUtils from "@/utilities/feature_funcs";
+//import FeatureUtils from "@/utilities/feature_funcs";
 
 export default {
 
@@ -87,44 +84,6 @@ export default {
                   src: NoneMarkerIcon,
                   scale: icon_scale
               });
-          }
-          else if(site_type == 'Shellfish')
-          {
-              try
-              {
-                  if (site_type in properties) {
-                      //First check to see if our data is still fresh.
-                      let dataFresh = FeatureUtils.isDataFresh(properties[site_type].advisory);
-                      if (dataFresh) {
-                          //Shellfish values are either true for closed or false for open.
-                          let value = properties[site_type].advisory.value;
-                          if (!value) {
-                              icon = new Icon({
-                                  src: ShellfishLowMarkerIcon,
-                                  scale: icon_scale
-                              });
-                          } else {
-                              icon = new Icon({
-                                  src: ShellfishHiMarkerIcon,
-                                  scale: icon_scale
-                              });
-                          }
-                      } else {
-                          icon = new Icon({
-                              src: ShellfishNoneMarkerIcon,
-                              scale: icon_scale
-                          });
-                      }
-                  }
-              }
-              catch(error)
-              {
-                  icon = new Icon({
-                      src: ShellfishNoneMarkerIcon,
-                      scale: icon_scale
-                  });
-                  console.error(error);
-              }
           }
           style.setImage(icon);
       }
