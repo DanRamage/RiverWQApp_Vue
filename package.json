@@ -1,6 +1,6 @@
 {
   "name": "howsmyscriver",
-  "version": "3.1.0",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -25,16 +25,18 @@
     "highcharts-vue": "^1.4.0",
     "leaflet": "^1.7.1",
     "moment": "^2.29.1",
-    "ol": "^7.3.0",
+    "ol": "^10.5.0",
+    "ol-contextmenu": "^5.5.0",
     "simple-statistics": "^7.7.0",
     "timed-cache": "^2.0.0",
     "typeface-montserrat": "0.0.75",
-    "vue": "^3.3.2",
+    "vue": "^3.5.14",
     "vue-analytics": "^5.22.1",
     "vue-gtag-next": "^1.14.0",
     "vue-loader": "^17.0.0",
     "vue-loader-v16": "npm:vue-loader@^16.0.0-alpha.3",
     "vue-router": "^4.2.0",
+    "vue3-openlayers": "^11.6.1",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

@@ -139,8 +139,4 @@
     .card-background-color {
         background-color: rgba(0, 61, 126, .85);
     }
-    .mote-icon {
-      //height: 45px;
-      //width: 45px;
-    }
 </style>

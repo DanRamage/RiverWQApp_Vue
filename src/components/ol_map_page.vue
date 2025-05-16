@@ -137,7 +137,10 @@
     //import 'typeface-montserrat/index.css';
 
     import OpenLayersMap from "vue3-openlayers";
-    app.use(OpenLayersMap);
+    const options = {
+      debug: true,
+    };
+    app.use(OpenLayersMap, options);
     import "vue3-openlayers/dist/vue3-openlayers.css";
 
     import DataAPI from "../utilities/rest_api";
@@ -501,6 +504,7 @@
                 }
 
                 style.setImage(icon);
+                return style;
             },
             extent_style_function(vector_feature, style)
             {
@@ -532,6 +536,8 @@
               style.setZIndex(z_index);
               let stroke = new Stroke({color: style_color, width: width});
               style.setStroke(stroke);
+
+              return style;
             },
             sidebarButtonClick() {
                 this.sidebarActive = !this.sidebarActive;
