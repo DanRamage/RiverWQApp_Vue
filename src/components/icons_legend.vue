@@ -1,10 +1,16 @@
 <template>
     <div>
-        <b-button v-b-toggle.legend_collapse class="legendButton app-button-style btn btn-primary avenir-font">
+        <button
+            class="legendButton app-button-style btn btn-primary avenir-font"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#legend_collapse"
+            aria-expanded="false"
+            aria-controls="legend_collapse">
             <span class="when-open"></span>
             <span class="when-closed">Legend</span>
-        </b-button>
-        <b-collapse id="legend_collapse" class="legend-card">
+        </button>
+        <div id="legend_collapse" class="collapse legend-card">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
@@ -12,7 +18,13 @@
                             Legend
                         </div>
                         <div class="col">
-                            <button v-b-toggle.legend_collapse type="button" class="close" aria-label="Close">
+                            <button
+                                type="button"
+                                class="close"
+                                aria-label="Close"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#legend_collapse"
+                                aria-controls="legend_collapse">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -21,18 +33,14 @@
                 <div class="card-body font-avenir">
                     <b>Site Types</b>
                     <ul class="list-group list-group-flush legend-test-size">
-                        <div v-if="hasIcons('Water Quality')">
-                                <li class="list-group-item">
-                                    <img src="@/assets/images/low_marker_25x25.png" class="advisory_icon mr-1">
-                                    Water Quality Sites
-                                </li>
-                        </div>
-                        <div v-if="hasIcons('Camera Site')">
-                            <li class="list-group-item">
-                                <img src="@/assets/images/webcam_icon.png" class="advisory_icon mr-1">
-                                WebCOOS Cameras
-                            </li>
-                        </div>
+                        <li v-if="hasIcons('Water Quality')" class="list-group-item">
+                          <img src="@/assets/images/low_marker_25x25.png" class="advisory_icon mr-1">
+                          Water Quality Sites
+                        </li>
+                        <li v-if="hasIcons('Camera Site')" class="list-group-item">
+                          <img src="@/assets/images/webcam_icon.png" class="advisory_icon mr-1">
+                          WebCOOS Cameras
+                        </li>
                     </ul>
                     <b>Color Codes</b>
                     <ul class="list-group list-group-flush legend-test-size">
@@ -52,15 +60,11 @@
 
                 </div>
             </div>
-        </b-collapse>
+        </div>
     </div>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import {CollapsePlugin,VBTogglePlugin} from 'bootstrap-vue';
-    Vue.use(CollapsePlugin);
-    Vue.use(VBTogglePlugin);
 
     export default {
         name: 'IconsLegend',
