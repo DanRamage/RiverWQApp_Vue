@@ -28,13 +28,13 @@
 </template>
 
 <script>
-    import Vue from 'vue';
+    //import Vue from 'vue';
     //import moment from 'moment/src/moment';
     //import moment from 'moment';
 
-    import { LayoutPlugin, CardPlugin } from 'bootstrap-vue';
-    Vue.use(LayoutPlugin);
-    Vue.use(CardPlugin);
+    //import { LayoutPlugin, CardPlugin } from 'bootstrap-vue';
+    //Vue.use(LayoutPlugin);
+    // Vue.use(CardPlugin);
 
     export default {
         name: 'CameraPopupBasic',

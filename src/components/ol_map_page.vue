@@ -133,7 +133,7 @@
 <script>
     import app from 'vue';
     import "bootstrap";
-    import 'bootstrap-vue/dist/bootstrap-vue.css';
+    //import 'bootstrap-vue/dist/bootstrap-vue.css';
     //import 'typeface-montserrat/index.css';
 
     import OpenLayersMap from "vue3-openlayers";

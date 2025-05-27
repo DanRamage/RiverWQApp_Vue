@@ -32,11 +32,11 @@
 </template>
 
 <script>
-    import Vue from 'vue';
+    //import Vue from 'vue';
 
-    import { LayoutPlugin, CardPlugin } from 'bootstrap-vue';
-    Vue.use(LayoutPlugin);
-    Vue.use(CardPlugin);
+    //import { LayoutPlugin, CardPlugin } from 'bootstrap-vue';
+    //Vue.use(LayoutPlugin);
+    //Vue.use(CardPlugin);
 
     export default {
         name: 'GeneralPopupBasic',

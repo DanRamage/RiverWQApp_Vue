@@ -3,17 +3,11 @@
         <div class="h-100 px-5 py-4 montserat-font text-center text-white blue-background_color sidebar-opacity">
             <a href="/">
                 <h6><i><span>
-                    <!--
-                    <slot v-bind="title"></slot>
-                    -->
                     <slot name="page-title-link"></slot>
                 </span></i></h6>
             </a>
             <h4>
                 <span>
-                    <!--
-                    <slot v-bind="name"></slot>
-                    -->
                     <slot name="page-name">Default Page Name</slot>
                 </span>
             </h4>
