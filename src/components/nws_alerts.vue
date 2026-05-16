@@ -15,6 +15,11 @@
       <div class="col-sm-3 fs-5">
         Wind: {{current_wind_speed_direction}}
       </div>
+      <div v-if="nexrad_precipitation_avg !== undefined">
+        <div class="col-sm-3  fs-5">
+          72 Hour Precipitation: {{current_nexrad_precipitation_avg}}
+        </div>
+      </div>
     </div>
     <USGSSitePage :p_usgs_site="p_usgs_site" :p_parameters="p_usgs_site_parameters"></USGSSitePage>
     <CurrentConditionsIndexModal  v-show="show_current_conditions_modal"
@@ -153,7 +158,11 @@ export default {
       query_tide_data: false,
       tide_station: undefined,
       tide_chart_data: undefined,
-      show_current_conditions_modal: false
+      show_current_conditions_modal: false,
+      nexrad_precipitation_data: undefined, //Holds the data records for the request.
+      nexrad_precipitation_avg: undefined, // Precipitation average over the nexrad_hours.
+      nexrad_hours: 72      //Number of hours of data to request
+
     }
   },
   created() {
@@ -331,6 +340,28 @@ export default {
 
       })
     }
+    //site, start_date, end_date, observation, longitude, latitude, units
+    let end_date = moment().format("YYYY-MM-DD hh:mm:ss");
+    let start_date = moment().subtract(this.nexrad_hours, 'hours').format("YYYY-MM-DD hh:mm:ss");
+    DataAPI.GetObservationData(start_date, end_date, 'nexrad', this.longitude, this.latitude, 'imperial').then(obs_data => {
+      vm.nexrad_precipitation_avg = undefined;
+      vm.nexrad_precipitation_data = undefined
+
+      let data_records = obs_data['data'];
+      for(var i = 0; i < data_records.length; i++) {
+        let precip_rec = data_records[i];
+        vm.nexrad_precipitation_avg = precip_rec['f'][0].v;
+      }
+      if(vm.nexrad_precipitation_avg !== undefined) {
+        vm.nexrad_precipitation_avg = vm.nexrad_precipitation_avg / data_records.length;
+      }
+    })
+        .catch(error => {
+          vm.nexrad_precipitation_avg = undefined;
+          vm.nexrad_precipitation_data = undefined
+          DataAPI.error_handler('GetObservationData', error);
+        });
+
     console.debug("NWSAlertsPage mounted finished.");
   },
   methods: {
@@ -474,6 +505,18 @@ export default {
             return (temp_f.toFixed() + " F");
           }
           return("N/A");
+        }
+        catch (e) {
+          console.exception(e);
+        }
+      }
+      return('');
+    },
+    current_nexrad_precipitation_avg: function() {
+      if(this.nexrad_precipitation_avg != undefined)
+      {
+        try {
+          return (this.nexrad_precipitation_avg.toFixed(2) + '"');
         }
         catch (e) {
           console.exception(e);

@@ -5,6 +5,8 @@ import axios from "axios";
 let BASE_API_URL = 'https://api.howsthebeach.org/api/v1/';
 //let BASE_API_URL = 'https://devapi.howsthebeach.org/api/v1/';
 let CAMERA_URL = "https://www.floridaapdata.org/beach/response_beach.php";
+let V2_API_URL = "http://127.0.0.1:5000/api/v2/";
+//let V2_API_URL = "https://devapi.howsthebeach.org/api/v2/";
 
 export default {
     GetSiteData(site_name, site, startdate, enddate) {
@@ -83,6 +85,27 @@ export default {
 
 
     },
+    GetObservationData(start_date, end_date, observation, longitude, latitude, units) {
+        console.log("GetObservationsData started for site " + start_date + " to "  +  end_date + " observation_list ");
+        let base_url = V2_API_URL + 'observation';
+        let url = new URL(base_url);
+        url.searchParams.append("start_date", start_date);
+        url.searchParams.append("end_date", end_date);
+        url.searchParams.append("observation_type", observation);
+        let points = longitude + ',' + latitude;
+        url.searchParams.append("points", points);
+        url.searchParams.append("units", units);
+
+        console.log("GetObservationsData GET url:" + url.href);
+        let obs_promise = axios.get(url.href, {headers: {'Content-Type': 'application/json'}})
+            .then(function(obs_data) {
+                return(obs_data.data);
+            })
+
+        return obs_promise;
+
+    },
+
     error_handler: function(caller_name, error) {
         let status_code = 404;
         if('response' in error && error.response !== undefined) {
