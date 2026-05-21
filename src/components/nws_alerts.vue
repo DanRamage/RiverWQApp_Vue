@@ -15,9 +15,9 @@
       <div class="col-sm-3 fs-5">
         Wind: {{current_wind_speed_direction}}
       </div>
-      <div v-if="nexrad_precipitation_avg !== undefined">
+      <div v-if="nexrad_precipitation_totals !== undefined">
         <div class="col-sm-3  fs-5">
-          72 Hour Precipitation: {{current_nexrad_precipitation_avg}}
+          72 Hour Precipitation: {{current_nexrad_precipitation_totals}}
         </div>
       </div>
     </div>
@@ -162,7 +162,7 @@ export default {
       show_current_conditions_modal: false,
       nexrad_boundary_name: undefined,
       nexrad_precipitation_data: undefined, //Holds the data records for the request.
-      nexrad_precipitation_avg: undefined, // Precipitation average over the nexrad_hours.
+      nexrad_precipitation_totals: undefined, // Precipitation average over the nexrad_hours.
       nexrad_hours: 72      //Number of hours of data to request
 
     }
@@ -346,7 +346,7 @@ export default {
     let end_date = moment().format("YYYY-MM-DD hh:mm:ss");
     let start_date = moment().subtract(this.nexrad_hours, 'hours').format("YYYY-MM-DD hh:mm:ss");
     DataAPI.GetObservationData(start_date, end_date, 'nexrad', this.longitude, this.latitude, 'imperial').then(obs_data => {
-      vm.nexrad_precipitation_avg = undefined;
+      vm.nexrad_precipitation_totals = undefined;
       vm.nexrad_precipitation_data = undefined
       vm.nexrad_boundary_name = undefined;
 
@@ -354,16 +354,21 @@ export default {
       let column_nfo = header['columns'][0];
       vm.nexrad_boundary_name = column_nfo.id;
       let data_records = obs_data['data'];
+      if (data_records != length) {
+        vm.nexrad_precipitation_totals = 0.0;
+      }
       for(var i = 0; i < data_records.length; i++) {
         let precip_rec = data_records[i];
-        vm.nexrad_precipitation_avg = precip_rec['f'][0].v;
+        vm.nexrad_precipitation_totals += precip_rec['f'][0].v;
       }
-      if(vm.nexrad_precipitation_avg !== undefined) {
-        vm.nexrad_precipitation_avg = vm.nexrad_precipitation_avg / data_records.length;
+      /*
+      if(vm.nexrad_precipitation_totals !== undefined) {
+        vm.nexrad_precipitation_totals = vm.nexrad_precipitation_totals / data_records.length;
       }
+      */
     })
         .catch(error => {
-          vm.nexrad_precipitation_avg = undefined;
+          vm.nexrad_precipitation_totals = undefined;
           vm.nexrad_precipitation_data = undefined
           vm.nexrad_boundary_name = undefined;
           DataAPI.error_handler('GetObservationData', error);
@@ -492,7 +497,7 @@ export default {
             let index = this.latest_obs_data.windDirection.value % 360;
             let dir_index = parseInt(index / 22.5);
             let compass_val = compass_array[dir_index];
-            return (wind_spd_mph.toFixed() + "Mph " + compass_val);
+            return (wind_spd_mph.toFixed() + " Mph " + compass_val);
           }
           return("N/A");
         }
@@ -519,11 +524,11 @@ export default {
       }
       return('');
     },
-    current_nexrad_precipitation_avg: function() {
-      if(this.nexrad_precipitation_avg != undefined)
+    current_nexrad_precipitation_totals: function() {
+      if(this.nexrad_precipitation_totals != undefined)
       {
         try {
-          return (this.nexrad_precipitation_avg.toFixed(2) + '"');
+          return (this.nexrad_precipitation_totals.toFixed(2) + '"');
         }
         catch (e) {
           console.exception(e);
