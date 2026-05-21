@@ -23,7 +23,7 @@
           </div>
           <div v-if="p_nexrad_boundary_name != undefined">
             <p>
-              The precipitation data is calculated from <a :href="p_nexrad_about_url" target="_blank">NEXRAD Precipitation Radar</a>. The watershed boundary used is: {{p_nexrad_boundary_name}}
+              The precipitation data is calculated from <a :href="p_nexrad_about_url" target="_blank">NEXRAD Precipitation Radar</a>. The <a href="https://nas.er.usgs.gov/hucs.aspx" target="_blank">watershed boundary</a> used is: {{p_nexrad_boundary_name}}
             </p>
           </div>
 
