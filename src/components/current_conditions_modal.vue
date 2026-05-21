@@ -17,7 +17,14 @@
             </p>
           </div>
           <div v-if="p_usgs_site != undefined">
-            The stream/river data comes from USGS station: <a :href="p_usgs_site_url" target="_blank">{{p_usgs_site}}</a>
+            <p>
+              The stream/river data comes from USGS station: <a :href="p_usgs_site_url" target="_blank">{{p_usgs_site}}</a>
+            </p>
+          </div>
+          <div v-if="p_nexrad_boundary_name != undefined">
+            <p>
+              The precipitation data is calculated from <a :href="p_nexrad_about_url" target="_blank">NEXRAD Precipitation Radar</a>. The watershed boundary used is: {{p_nexrad_boundary_name}}
+            </p>
           </div>
 
         </div>
@@ -36,12 +43,15 @@ export default {
     p_nws_site_url: {type: String, default: undefined},
     //This is the USGS river station for the sampling site.
     p_usgs_site: {type: String, default: undefined},
-    p_usgs_site_url: {type: String, default: undefined}
+    p_usgs_site_url: {type: String, default: undefined},
+    p_nexrad_about_url: {type: String, default: "https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar#tab-115"},
+    p_nexrad_boundary_name: {type: String, default: undefined}
   },
   mounted() {
     console.debug("CurrentConditionsIndexModal mounted.")
     console.debug("NWS Site: " + this.p_nws_site + " " + this.p_nws_site_url);
     console.debug("USGS Site: " + this.p_usgs_site + " " + this.p_usgs_site_url);
+    console.debug("NEXRAD Boundary: " + this.p_nexrad_boundary_name);
   },
   computed: {
   }

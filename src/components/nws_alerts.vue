@@ -25,7 +25,8 @@
     <CurrentConditionsIndexModal  v-show="show_current_conditions_modal"
                                   @close-current-conditions-modal="show_current_conditions_modal = false"
                                   :p_nws_site="nws_site_name" :p_nws_site_url="nws_site_url"
-                                  :p_usgs_site="p_usgs_site" :p_usgs_site_url="usgs_site_url">
+                                  :p_usgs_site="p_usgs_site" :p_usgs_site_url="usgs_site_url"
+                                  :p_nexrad_boundary_name="nexrad_boundary_name">
     </CurrentConditionsIndexModal>
 
     <div v-if="tide_chart_data !== undefined">
@@ -159,6 +160,7 @@ export default {
       tide_station: undefined,
       tide_chart_data: undefined,
       show_current_conditions_modal: false,
+      nexrad_boundary_name: undefined,
       nexrad_precipitation_data: undefined, //Holds the data records for the request.
       nexrad_precipitation_avg: undefined, // Precipitation average over the nexrad_hours.
       nexrad_hours: 72      //Number of hours of data to request
@@ -346,7 +348,11 @@ export default {
     DataAPI.GetObservationData(start_date, end_date, 'nexrad', this.longitude, this.latitude, 'imperial').then(obs_data => {
       vm.nexrad_precipitation_avg = undefined;
       vm.nexrad_precipitation_data = undefined
+      vm.nexrad_boundary_name = undefined;
 
+      let header = obs_data['header'];
+      let column_nfo = header['columns'][0];
+      vm.nexrad_boundary_name = column_nfo.id;
       let data_records = obs_data['data'];
       for(var i = 0; i < data_records.length; i++) {
         let precip_rec = data_records[i];
@@ -359,6 +365,7 @@ export default {
         .catch(error => {
           vm.nexrad_precipitation_avg = undefined;
           vm.nexrad_precipitation_data = undefined
+          vm.nexrad_boundary_name = undefined;
           DataAPI.error_handler('GetObservationData', error);
         });
 
