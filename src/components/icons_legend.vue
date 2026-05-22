@@ -39,7 +39,7 @@
                         </li>
                         <li v-if="hasIcons('Camera Site')" class="list-group-item">
                           <img src="@/assets/images/webcam_icon.png" class="advisory_icon mr-1">
-                          WebCOOS Cameras
+                          Web Cameras
                         </li>
                     </ul>
                     <b>Color Codes</b>
