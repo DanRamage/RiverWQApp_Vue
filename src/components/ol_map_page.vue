@@ -61,7 +61,7 @@
                     <ol-source-vector ref="sites_vector_source">
                         <ol-feature v-for="feature in features"
                                     :key="feature.id"
-                                    :properties="{ id: feature.id }"
+                                    :properties="{ id: feature.id, properties: feature.properties }"
                         >
 
                             <ol-geom-point

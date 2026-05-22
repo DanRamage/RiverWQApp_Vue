@@ -10,7 +10,6 @@
             Web Camera Observation Network
           </div>
           <div class="card-body">
-            <img class="card-img-top cam-card cam-logo-img" src="@/assets/images/secoora_logo_white.svg" alt="Web Camera Observation Network">
             <p>
               Camera Site Name: {{ camera_site_name }}
             </p>
@@ -18,7 +17,7 @@
               Click <a :href="camera_site_link" target="_blank">here</a> to view the Web Camera at this location.
             </div>
             <div>
-              This will open the WebCOOS camera site in a new tab.
+              This will open the camera site in a new tab.
             </div>
           </div>
         </div>
