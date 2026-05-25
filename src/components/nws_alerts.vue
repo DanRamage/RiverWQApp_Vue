@@ -343,8 +343,8 @@ export default {
       })
     }
     //site, start_date, end_date, observation, longitude, latitude, units
-    let end_date = moment().format("YYYY-MM-DD hh:mm:ss");
-    let start_date = moment().subtract(this.nexrad_hours, 'hours').format("YYYY-MM-DD hh:mm:ss");
+    let end_date = moment().format("YYYY-MM-DD HH:mm:ss");
+    let start_date = moment().subtract(this.nexrad_hours, 'hours').format("YYYY-MM-DD HH:mm:ss");
     DataAPI.GetObservationData(start_date, end_date, 'nexrad', this.longitude, this.latitude, 'imperial').then(obs_data => {
       vm.nexrad_precipitation_totals = undefined;
       vm.nexrad_precipitation_data = undefined
