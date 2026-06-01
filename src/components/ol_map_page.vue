@@ -89,11 +89,9 @@
                 -->
                 <ol-vector-layer ref="extents_vector_layer">
                   <ol-source-vector ref="extents_vector_source">
-                    <ol-feature v-for="feature in features" :key="feature.id"
-                                :properties="{ id: feature.id }">
-                      <ol-geom-multi-line-string v-for="extent in feature.properties.extents_geometry"
-                                                 :key="extent.id"
-                                                  :coordinates="extent.geometry.coordinates">
+                    <ol-feature v-for="extent in site_extents" :key="extent.id"
+                                :properties="{ id: extent.id, 'feature_id': extent.properties['feature_id'] }">
+                      <ol-geom-multi-line-string :coordinates="extent.geometry.coordinates">
 
                       </ol-geom-multi-line-string>
                     </ol-feature>
@@ -185,6 +183,7 @@
                 center: [0,0],
                 rotation: 0,
                 features: [],
+                site_extents: [],
                 loading: false,
                 current_google_layer: 'm',
                 current_layer_url: '',
@@ -243,6 +242,22 @@
                 DataAPI.GetSitesPromise(location_site_name, '', true, true).then(features => {
                     console.debug("Retrieved: " + features.data.sites.features.length + " features");
                     vm.features = features.data.sites.features;
+
+                    /*
+                    For our extents vector layer we were adding a layer per site feature, but the sites that had multiple
+                    extents did not seem to render all the extents. As a test/fix we save the extents here, add the feature_id
+                    as an extent property and this seems to render and style the extents.
+                     */
+                    for(let feature_ndx = 0; feature_ndx < vm.features.length;feature_ndx++ ) {
+                      let feature = vm.features[feature_ndx];
+                      if('extents_geometry' in feature.properties)
+                      {
+                        feature.properties.extents_geometry.forEach(extent => {
+                          extent.properties['feature_id'] = feature.id;
+                          vm.site_extents.push(extent);
+                        });
+                      }
+                    }
                     //Store the feature data.
                     let latest_sample_date = undefined;
                     let jsonld_elements = [];
@@ -508,8 +523,8 @@
             },
             extent_style_function(vector_feature, style)
             {
-              console.log("extent_style_function started.");
-              let vector_id = vector_feature.getProperties().id;
+              let vector_id = vector_feature.getProperties().feature_id;
+              console.log("extent_style_function started extent: " + vector_id);
               let feature = undefined;
               if(vector_id in this.$store.state.station_data) {
                 feature = this.$store.state.station_data[vector_id];
@@ -521,6 +536,7 @@
               let z_index = 1;
               if(feature !== undefined) {
                 let properties = feature.properties;
+                console.log("extent_style_function for site: " + properties.site_name);
                 let site_type = properties.site_type;
                 if ('advisory' in properties[site_type]) {
                   let value = properties[site_type].advisory.value;
